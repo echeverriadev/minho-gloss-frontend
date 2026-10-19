@@ -78,11 +78,11 @@ Todo control de formulario SHALL tener una etiqueta asociada, los íconos decora
 - **THEN** el botón tiene `aria-label="Llamar a <nombre>"`
 
 ### Requirement: Textos de la interfaz
-Los textos visibles SHALL estar en español, con tono cercano y de tú, en sentence case ("Registrar servicio", no "Registrar Servicio"). Los montos SHALL mostrarse con `Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 })` y las fechas con `Intl.DateTimeFormat('es-CO', { timeZone: 'America/Bogota' })`, mediante utilidades únicas en `src/shared/lib/format.ts`.
+Los textos visibles SHALL estar en español, con tono cercano y de tú, en sentence case ("Registrar servicio", no "Registrar Servicio"). Los montos SHALL mostrarse con `Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' })` a partir de céntimos y las fechas con `Intl.DateTimeFormat('es-ES', { timeZone: 'Europe/Lisbon' })`, mediante utilidades únicas en `src/shared/lib/format.ts`.
 
 #### Scenario: Mostrar un precio
-- **WHEN** se muestra un precio de 28000
-- **THEN** la interfaz muestra "$ 28.000"
+- **WHEN** se muestra un precio de 2000 céntimos
+- **THEN** la interfaz muestra "20,00 €"
 
 ### Requirement: Comentarios
 Los comentarios SHALL estar en español y explicar el porqué de una decisión no evidente; SHALL NOT repetir lo que el código ya dice. Un `TODO` SHALL referenciar un cambio de OpenSpec o una sugerencia de `decisiones-tecnicas.md`.

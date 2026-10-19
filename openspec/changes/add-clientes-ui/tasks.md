@@ -12,7 +12,7 @@
 - [ ] 2.2 Crear `ClienteForm` y `VehiculoForm` con React Hook Form, placa en mayúsculas y errores 409 en el campo
 - [ ] 2.3 Crear `ClienteDetalle` con vehículos, contadores, historial y acciones de contacto
 - [ ] 2.4 Crear las páginas `/clientes`, `/clientes/nuevo`, `/clientes/:id` y `/clientes/:id/editar`
-- [ ] 2.5 Agregar, editar y dar de baja vehículos desde la ficha; baja de cliente solo para admin
+- [ ] 2.5 Agregar, editar y dar de baja vehículos desde la ficha; baja de cliente y borrado de datos personales (RGPD) solo para admin
 
 ## 3. Verificación
 

@@ -3,7 +3,7 @@
 ## 1. Feature
 
 - [ ] 1.1 Crear `src/features/metricas/` con `types.ts` y `api.ts` (resumen, serie diaria, clientes inactivos)
-- [ ] 1.2 Crear utilidades de periodos (hoy, ayer, semana, mes, mes anterior) en `America/Bogota` con pruebas de cambio de mes
+- [ ] 1.2 Crear utilidades de periodos (hoy, ayer, semana, mes, mes anterior) en `Europe/Lisbon` con pruebas de cambio de mes
 - [ ] 1.3 Crear `SelectorPeriodo`, `IndicadorCard`, `GraficoBarras` (con tabla accesible) y `DesgloseLista`, con historias de Storybook
 - [ ] 1.4 Crear `ClientesInactivosList`
 

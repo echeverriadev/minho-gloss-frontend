@@ -13,7 +13,7 @@ La pantalla `/metricas`, solo para `admin`, SHALL ofrecer los periodos Hoy (por 
 - **THEN** las métricas van del lunes al jueves y la URL refleja el periodo
 
 ### Requirement: Indicadores principales
-El panel SHALL mostrar tarjetas con ingresos, cantidad de servicios, ticket promedio y clientes atendidos (con nuevos y recurrentes), formateados en `es-CO`. Ingresos y cantidad SHALL mostrar la variación porcentual frente al periodo anterior con flecha y color (verde si sube, rojo si baja), o "Sin datos previos" si la variación es nula.
+El panel SHALL mostrar tarjetas con ingresos, cantidad de servicios, ticket promedio y clientes atendidos (con nuevos y recurrentes), formateados en `es-ES` con euros. Ingresos y cantidad SHALL mostrar la variación porcentual frente al periodo anterior con flecha y color (verde si sube, rojo si baja), o "Sin datos previos" si la variación es nula.
 
 #### Scenario: Día mejor que el anterior
 - **WHEN** hoy se facturó un 20 % más que ayer
@@ -45,4 +45,4 @@ Si el periodo no tiene servicios, el panel SHALL mostrar los indicadores en cero
 
 #### Scenario: Domingo cerrado
 - **WHEN** el admin consulta un día sin servicios
-- **THEN** ve los indicadores en $ 0 y el mensaje de periodo sin datos
+- **THEN** ve los indicadores en 0,00 € y el mensaje de periodo sin datos

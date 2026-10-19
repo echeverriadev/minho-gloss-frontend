@@ -4,7 +4,6 @@ import { env } from '@/shared/config/env';
 const monedaFormatter = new Intl.NumberFormat(env.locale, {
   style: 'currency',
   currency: env.currency,
-  maximumFractionDigits: 0,
 });
 
 const fechaFormatter = new Intl.DateTimeFormat(env.locale, {
@@ -18,9 +17,9 @@ const fechaHoraFormatter = new Intl.DateTimeFormat(env.locale, {
   timeStyle: 'short',
 });
 
-/** Formatea un monto entero en la moneda del negocio, por ejemplo 28000 → "$ 28.000". */
-export function formatMoneda(monto: number): string {
-  return monedaFormatter.format(monto);
+/** Formatea un monto en céntimos en la moneda del negocio, por ejemplo 2000 → "20,00 €". */
+export function formatMoneda(centimos: number): string {
+  return monedaFormatter.format(centimos / 100);
 }
 
 /** Formatea una fecha ISO 8601 como día en la zona horaria del negocio. */

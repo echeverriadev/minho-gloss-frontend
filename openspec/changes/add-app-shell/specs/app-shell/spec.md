@@ -50,7 +50,7 @@ Dar de baja, anular o descartar SHALL pedir confirmación con un `ConfirmDialog`
 
 #### Scenario: Anular un servicio
 - **WHEN** el admin toca "Anular" en un servicio
-- **THEN** la app pregunta "¿Anular el servicio de ABC123?" antes de enviarlo
+- **THEN** la app pregunta "¿Anular el servicio de AA12BB?" antes de enviarlo
 
 ### Requirement: Página no encontrada
 Una ruta desconocida SHALL mostrar "No encontramos esta página" con un botón para volver al inicio.

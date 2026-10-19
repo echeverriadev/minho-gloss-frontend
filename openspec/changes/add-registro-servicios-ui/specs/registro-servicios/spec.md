@@ -16,8 +16,8 @@ La pantalla de inicio `/` SHALL mostrar el botón principal "Registrar servicio"
 El registro SHALL empezar pidiendo la placa con el teclado adecuado y en mayúsculas. Si la placa existe, SHALL mostrar el vehículo y su cliente para confirmar. Si no existe, SHALL ofrecer crear un cliente nuevo con su vehículo (nombre, teléfono, tipo de vehículo y autorización de contacto) sin salir del flujo, o elegir un cliente existente para agregarle el vehículo.
 
 #### Scenario: Cliente conocido
-- **WHEN** el empleado escribe `ABC123` y la placa existe
-- **THEN** la app muestra "ABC123 · Auto · Ana Gómez" con el botón "Continuar"
+- **WHEN** el empleado escribe `AA12BB` y la placa existe
+- **THEN** la app muestra "AA12BB · Auto · Ana Gómez" con el botón "Continuar"
 
 #### Scenario: Placa nueva
 - **WHEN** la placa no existe
@@ -27,8 +27,8 @@ El registro SHALL empezar pidiendo la placa con el teclado adecuado y en mayúsc
 Después del vehículo, la app SHALL mostrar los tipos de servicio activos como opciones grandes con el precio de lista para el tipo de vehículo, y luego el precio cobrado (prellenado con el de lista y editable con `MoneyInput`, mostrando el descuento si es menor), el método de pago (preseleccionado con el último usado en el dispositivo) y notas opcionales.
 
 #### Scenario: Descuento
-- **WHEN** el precio de lista es $ 28.000 y el empleado escribe $ 25.000
-- **THEN** la app muestra "Descuento: $ 3.000" antes de guardar
+- **WHEN** el precio de lista es 20,00 € y el empleado escribe 18,00 €
+- **THEN** la app muestra "Descuento: 2,00 €" antes de guardar
 
 ### Requirement: Guardar el servicio
 Al tocar "Guardar", la app SHALL llamar a `POST /api/servicios-prestados`, mostrar el aviso "Servicio registrado" y volver al inicio con el servicio en la lista del día. Un error de la API SHALL mostrarse sin perder lo elegido.

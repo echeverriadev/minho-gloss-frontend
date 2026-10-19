@@ -9,9 +9,9 @@ Pantallas para buscar, ver, crear, editar y dar de baja a los clientes del autol
 La pantalla `/clientes` SHALL mostrar un buscador fijo arriba y la lista de clientes en tarjetas con nombre, teléfono, placas y fecha del último servicio. Al escribir, la búsqueda SHALL esperar 300 ms sin cambios antes de llamar a `GET /api/clientes?q=`, y el texto buscado SHALL quedar en la URL (`?q=`). La lista SHALL cargar más resultados al llegar al final o con un botón "Ver más".
 
 #### Scenario: Buscar por placa
-- **WHEN** el usuario escribe "abc1" en el buscador
-- **THEN** la lista muestra los clientes con placas que empiezan por `ABC1`
-- **AND** la URL queda como `/clientes?q=abc1`
+- **WHEN** el usuario escribe "aa1" en el buscador
+- **THEN** la lista muestra los clientes con placas que empiezan por `AA1`
+- **AND** la URL queda como `/clientes?q=aa1`
 
 #### Scenario: Búsqueda sin resultados
 - **WHEN** no hay clientes que coincidan
@@ -48,3 +48,11 @@ La opción "Dar de baja" SHALL mostrarse solo a `admin`, pedir confirmación ind
 #### Scenario: Empleado en la ficha
 - **WHEN** un empleado abre la ficha de un cliente
 - **THEN** no ve la opción "Dar de baja"
+
+### Requirement: Borrar datos personales del cliente
+La ficha SHALL ofrecer al `admin` la opción "Borrar datos personales (RGPD)", que explica que es irreversible, pide escribir el nombre del cliente para confirmar y llama a `POST /api/clientes/:id/anonimizar`.
+
+#### Scenario: Confirmación del borrado
+- **WHEN** el admin elige borrar los datos y escribe el nombre del cliente
+- **THEN** la app anonimiza al cliente, vuelve a la lista y muestra el aviso "Datos personales borrados"
+

@@ -19,7 +19,7 @@ La app se usará casi siempre desde un celular, de pie y con una mano. Hoy solo 
 2. **Componentes propios con Tailwind**, sin librería de componentes (Headless UI, Radix, shadcn). El `Dialog` usa el elemento nativo `<dialog>` con `showModal()`, que ya maneja foco y tecla Escape. Alternativa: Radix; se reconsidera si aparecen necesidades de accesibilidad que lo nativo no cubra.
 3. **Toasts con un store pequeño de Zustand** (`useToastStore`) en `src/shared/ui/Toast/`, porque los avisos se disparan desde cualquier pantalla.
 4. **`useAsync` propio** en `src/shared/hooks/` que recibe una función que devuelve una promesa y expone `data`, `error`, `isLoading` y `reload`, ignorando respuestas que llegan después de desmontar. Alternativa: TanStack Query (caché, reintentos, invalidación); se deja como sugerencia si la app crece, para no agregar una dependencia en la v1.
-5. **`MoneyInput`** muestra el valor formateado en COP mientras se escribe y entrega un entero a React Hook Form.
+5. **`MoneyInput`** muestra el valor formateado en euros mientras se escribe (acepta coma decimal) y entrega un entero en céntimos a React Hook Form.
 
 ## Risks / Trade-offs
 
