@@ -27,11 +27,14 @@ docker compose up --build
 Todos se ejecutan **dentro del contenedor**:
 
 ```bash
-docker compose exec web npm run lint          # oxlint
+docker compose exec web npm run check         # lint + formato + build + specs
+docker compose exec web npm run lint          # oxlint (con chequeo de tipos)
+docker compose exec web npm run lint:fix      # corrige lo que oxlint puede
 docker compose exec web npm run format        # Prettier
 docker compose exec web npm run build         # chequeo de tipos + build
 docker compose exec web npm install <paquete> # nueva dependencia
 docker compose exec web npx openspec list     # cambios de OpenSpec en curso
+docker compose exec web npm run specs:validate # valida specs y cambios
 ```
 
 Si cambia `package.json` en otra rama (por ejemplo tras un `git pull`), actualiza las dependencias del volumen con `docker compose exec web npm install`.
@@ -56,14 +59,26 @@ openspec/            # especificaciones (SDD)
 
 ## Cómo trabajamos (SDD con OpenSpec)
 
-1. Crea una rama `feature/<nombre>` desde `develop`.
-2. Escribe la propuesta del cambio en `openspec/changes/` (con Claude Code: `/opsx:propose "idea"`).
+1. Crea una rama `feature/<cambio>` desde `develop`.
+2. Escribe o elige la propuesta del cambio en `openspec/changes/` (con Claude Code: `/opsx:propose "idea"`). Las pantallas de la v1 ya tienen su cambio listo: ver [`openspec/README.md`](openspec/README.md).
 3. Valídala: `docker compose exec web npx openspec validate <cambio>`.
 4. Implementa siguiendo su `tasks.md` (`/opsx:apply`).
-5. Pasa lint, formato y build, abre el pull request hacia `develop`.
+5. Pasa `npm run check`, abre el pull request hacia `develop` y espera la CI en verde.
 6. Al integrar, archiva el cambio (`/opsx:archive`) para actualizar `openspec/specs/`.
 
-Las reglas completas (Git Flow, commits, nombres, lint) están en [`openspec/specs/project-conventions/spec.md`](openspec/specs/project-conventions/spec.md).
+Reglas completas:
+
+- [`openspec/README.md`](openspec/README.md): mapa de specs y cambios pendientes.
+- [`git-workflow`](openspec/specs/git-workflow/spec.md): ramas, commits y pull requests.
+- [`code-style`](openspec/specs/code-style/spec.md): nombres, React, Tailwind, lint, formato y accesibilidad.
+- [`frontend-architecture`](openspec/specs/frontend-architecture/spec.md): estructura, rutas, estado y API.
+- [`decisiones-tecnicas.md`](openspec/decisiones-tecnicas.md): decisiones adoptadas y sugerencias pendientes.
+
+## Calidad de código
+
+- **Prettier** formatea todo y ordena las clases de Tailwind (`.prettierrc.json`); **oxlint** revisa el código con reglas de React, TypeScript, imports, promesas y accesibilidad, usando información de tipos (`.oxlintrc.json`). Los warnings también hacen fallar.
+- La **CI de GitHub Actions** (`.github/workflows/ci.yml`) corre lint, formato, build, build de Storybook y validación de specs en cada pull request.
+- En VS Code, instala las extensiones recomendadas (`.vscode/extensions.json`) para formatear al guardar.
 
 ## Producción
 
