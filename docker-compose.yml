@@ -1,0 +1,32 @@
+name: minho-gloss-frontend
+
+services:
+  web:
+    build:
+      context: .
+      target: dev
+    ports:
+      - '5173:5173'
+    environment:
+      OPENSPEC_TELEMETRY: 0
+    env_file:
+      - path: .env
+        required: false
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+
+  storybook:
+    build:
+      context: .
+      target: dev
+    command: npm run storybook -- --host 0.0.0.0 --no-open
+    ports:
+      - '6006:6006'
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+    profiles: [storybook]
+
+volumes:
+  node_modules:

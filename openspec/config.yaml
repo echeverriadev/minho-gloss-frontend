@@ -1,0 +1,23 @@
+schema: spec-driven
+
+context: |
+  Language: es
+  All artifacts must be written in es.
+  Keep OpenSpec structural headings and SHALL/MUST keywords in English.
+
+  Proyecto: Minho Gloss, app de gestión de un autolavado (clientes, servicios con tipos y precios,
+  métricas diarias de servicios, post-venta por correo y teléfono, inicio de sesión).
+  Proyecto sin fines de lucro: priorizar siempre el costo mínimo y herramientas gratuitas.
+  Este repo es el FRONTEND: React 19 + Vite + TypeScript, mobile first, React Router, Tailwind CSS 4,
+  Lucide React, React Hook Form, Zustand (solo si hace falta), Storybook, oxlint y Prettier.
+  El backend vive en otro repo (minho-gloss-backend: NestJS + MongoDB + Swagger).
+  Todo corre en Docker (docker compose); los comandos se ejecutan con `docker compose exec web ...`.
+  Git Flow: ramas feature/* desde develop; Conventional Commits.
+
+rules:
+  proposal:
+    - Indicar qué queda fuera de alcance
+  design:
+    - Si se introduce un servicio externo, comparar al menos una opción gratuita
+  tasks:
+    - Incluir una historia de Storybook por cada componente compartido nuevo
