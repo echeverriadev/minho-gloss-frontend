@@ -2,6 +2,9 @@
 
 interface ImportMetaEnv {
   readonly VITE_API_URL?: string;
+  readonly VITE_APP_LOCALE?: string;
+  readonly VITE_APP_CURRENCY?: string;
+  readonly VITE_APP_TIMEZONE?: string;
 }
 
 interface ImportMeta {

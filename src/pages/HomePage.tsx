@@ -1,5 +1,5 @@
 import { Droplets } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { apiClient } from '@/shared/lib/apiClient';
 import { Button } from '@/shared/ui/Button/Button';
 
@@ -8,19 +8,22 @@ type HealthStatus = 'checking' | 'ok' | 'error';
 export function HomePage() {
   const [status, setStatus] = useState<HealthStatus>('checking');
 
-  const fetchHealth = () =>
-    apiClient
-      .get<{ status: string }>('/health')
-      .then(() => setStatus('ok'))
-      .catch(() => setStatus('error'));
+  const checkHealth = useCallback(
+    () =>
+      apiClient.get<{ status: string }>('/health').then(
+        () => setStatus('ok'),
+        () => setStatus('error'),
+      ),
+    [],
+  );
 
   useEffect(() => {
-    fetchHealth();
-  }, []);
+    void checkHealth();
+  }, [checkHealth]);
 
   const retry = () => {
     setStatus('checking');
-    fetchHealth();
+    void checkHealth();
   };
 
   return (
