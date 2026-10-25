@@ -17,6 +17,7 @@ import {
   validarFechaNacimiento,
   validarTelefono,
 } from '../validaciones';
+import { useTextos } from '@/shared/i18n/textos';
 
 export interface ClienteFormProps {
   cliente?: Cliente;
@@ -28,6 +29,7 @@ type CampoConflicto = 'telefono' | 'cedula';
 
 /** Alta y edición de un cliente con las reglas de `domain-model`. */
 export function ClienteForm({ cliente, onSubmit, onCancel }: ClienteFormProps) {
+  const t = useTextos();
   const [errorApi, setErrorApi] = useState<string>();
   const [conflictos, setConflictos] = useState<Partial<Record<CampoConflicto, string>>>({});
   const {
@@ -75,7 +77,7 @@ export function ClienteForm({ cliente, onSubmit, onCancel }: ClienteFormProps) {
         to={`/clientes/${conflictos[campo]}`}
         className="text-brand-700 text-sm font-medium underline"
       >
-        Ver cliente
+        {t.clientes.verCliente}
       </Link>
     );
 
@@ -84,101 +86,101 @@ export function ClienteForm({ cliente, onSubmit, onCancel }: ClienteFormProps) {
       {errorApi && <FormAlert tipo="error">{errorApi}</FormAlert>}
       <div className="grid gap-4 sm:grid-cols-2">
         <Input
-          label="Nombre"
+          label={t.clientes.nombre}
           autoComplete="given-name"
           error={errors.nombre?.message}
           {...register('nombre', {
-            required: 'El nombre es obligatorio',
-            validate: longitud(2, 60, 'El nombre debe tener entre 2 y 60 caracteres'),
+            required: t.clientes.v.nombreObligatorio,
+            validate: longitud(2, 60, t.clientes.v.nombreLongitud),
           })}
         />
         <Input
-          label="Apellido"
+          label={t.clientes.apellido}
           autoComplete="family-name"
           error={errors.apellido?.message}
           {...register('apellido', {
-            required: 'El apellido es obligatorio',
-            validate: longitud(2, 60, 'El apellido debe tener entre 2 y 60 caracteres'),
+            required: t.clientes.v.apellidoObligatorio,
+            validate: longitud(2, 60, t.clientes.v.apellidoLongitud),
           })}
         />
       </div>
       <Input
-        label="Cédula"
-        hint="NIF, Cartão de Cidadão, pasaporte u otro documento"
+        label={t.clientes.cedula}
+        hint={t.clientes.cedulaAyuda}
         autoComplete="off"
         error={errors.cedula?.message}
         errorAction={verCliente('cedula')}
         {...register('cedula', {
-          required: 'La cédula es obligatoria',
-          validate: validarCedula,
+          required: t.clientes.v.cedulaObligatoria,
+          validate: validarCedula(t.clientes.v),
         })}
       />
       <Input
-        label="Teléfono celular"
+        label={t.clientes.telefono}
         type="tel"
         inputMode="tel"
         autoComplete="tel"
         placeholder="912 345 678"
-        hint="Sin código de país se usa +351 (Portugal)"
+        hint={t.clientes.telefonoAyuda}
         error={errors.telefono?.message}
         errorAction={verCliente('telefono')}
         {...register('telefono', {
-          required: 'El teléfono es obligatorio',
-          validate: validarTelefono,
+          required: t.clientes.v.telefonoObligatorio,
+          validate: validarTelefono(t.clientes.v),
         })}
       />
       <Input
-        label="Correo"
+        label={t.clientes.correo}
         type="email"
         inputMode="email"
         autoComplete="email"
         error={errors.email?.message}
         {...register('email', {
-          required: 'El correo es obligatorio',
-          pattern: { value: EMAIL_PATTERN, message: 'El correo no es válido' },
+          required: t.validacion.emailObligatorio,
+          pattern: { value: EMAIL_PATTERN, message: t.validacion.emailInvalido },
         })}
       />
       <Input
-        label="Dirección"
+        label={t.clientes.direccion}
         autoComplete="street-address"
         placeholder="Rua do Souto 25, 4700-329 Braga"
         error={errors.direccion?.message}
         {...register('direccion', {
-          required: 'La dirección es obligatoria',
-          validate: longitud(5, 200, 'La dirección debe tener entre 5 y 200 caracteres'),
+          required: t.clientes.v.direccionObligatoria,
+          validate: longitud(5, 200, t.clientes.v.direccionLongitud),
         })}
       />
       <Input
-        label="Fecha de nacimiento"
+        label={t.clientes.fechaNacimiento}
         type="date"
         min={FECHA_MINIMA_NACIMIENTO}
         max={hoyIso()}
         autoComplete="bday"
         error={errors.fechaNacimiento?.message}
         {...register('fechaNacimiento', {
-          required: 'La fecha de nacimiento es obligatoria',
-          validate: validarFechaNacimiento,
+          required: t.clientes.v.fechaObligatoria,
+          validate: validarFechaNacimiento(t.clientes.v),
         })}
       />
       <Checkbox
-        label="Acepta recibir recordatorios por WhatsApp, llamada o correo"
-        hint="Pregúntaselo al cliente: sin su autorización no se le envían mensajes (RGPD)"
+        label={t.clientes.aceptaContacto}
+        hint={t.clientes.aceptaContactoAyuda}
         {...register('aceptaContacto')}
       />
       <Textarea
-        label="Notas"
-        hint="Opcional, hasta 500 caracteres"
+        label={t.clientes.notas}
+        hint={t.clientes.notasAyuda}
         error={errors.notas?.message}
         {...register('notas', {
-          maxLength: { value: 500, message: 'Las notas no pueden superar los 500 caracteres' },
+          maxLength: { value: 500, message: t.clientes.v.notasLongitud },
         })}
       />
       <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
         <Button variant="secondary" onClick={onCancel} disabled={isSubmitting}>
-          Cancelar
+          {t.comun.cancelar}
         </Button>
         <Button type="submit" isLoading={isSubmitting}>
-          Guardar
+          {t.comun.guardar}
         </Button>
       </div>
     </form>

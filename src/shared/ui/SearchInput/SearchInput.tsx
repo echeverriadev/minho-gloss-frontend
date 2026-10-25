@@ -2,6 +2,7 @@ import { Search, X } from 'lucide-react';
 import { type InputHTMLAttributes, useId } from 'react';
 import { cn } from '@/shared/lib/cn';
 import { inputClasses, inputStateClasses } from '../Field/fieldClasses';
+import { useTextos } from '@/shared/i18n/textos';
 
 export interface SearchInputProps extends Omit<
   InputHTMLAttributes<HTMLInputElement>,
@@ -16,6 +17,7 @@ export interface SearchInputProps extends Omit<
 export function SearchInput({ label, value, onChange, id, className, ...props }: SearchInputProps) {
   const generatedId = useId();
   const inputId = id ?? generatedId;
+  const t = useTextos();
   return (
     <div className="relative">
       <label htmlFor={inputId} className="sr-only">
@@ -37,7 +39,7 @@ export function SearchInput({ label, value, onChange, id, className, ...props }:
         <button
           type="button"
           onClick={() => onChange('')}
-          aria-label="Borrar búsqueda"
+          aria-label={t.comun.borrarBusqueda}
           className="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-slate-500 hover:text-slate-800"
         >
           <X className="size-5" aria-hidden />

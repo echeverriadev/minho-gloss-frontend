@@ -1,22 +1,24 @@
 import { Droplets } from 'lucide-react';
 import { Link, NavLink, Outlet } from 'react-router';
 import { useUsuarioActual } from '@/features/auth';
+import { useTextos } from '@/shared/i18n/textos';
 import { cn } from '@/shared/lib/cn';
 import { NAVEGACION } from './navegacion';
 
 /** Layout con sesión: encabezado, barra inferior en el celular y lateral desde `md` (spec app-shell). */
 export function AppLayout() {
   const usuario = useUsuarioActual();
+  const t = useTextos();
   const items = NAVEGACION.filter((item) => !item.rol || item.rol === usuario.rol);
 
   return (
     <div className="min-h-dvh md:flex">
-      <aside className="hidden md:sticky md:top-0 md:flex md:h-dvh md:w-60 md:shrink-0 md:flex-col md:gap-6 md:border-r md:border-slate-200 md:bg-white md:p-4">
+      <aside className="md:bg-surface hidden md:sticky md:top-0 md:flex md:h-dvh md:w-60 md:shrink-0 md:flex-col md:gap-6 md:border-r md:border-slate-200 md:p-4">
         <Link to="/" className="flex items-center gap-2 px-2 text-lg font-bold text-slate-900">
           <Droplets className="text-brand-600 size-7" aria-hidden />
           Minho Gloss
         </Link>
-        <nav aria-label="Principal">
+        <nav aria-label={t.nav.principal}>
           <ul className="flex flex-col gap-1">
             {items.map(({ to, etiqueta, icono: Icono }) => (
               <li key={to}>
@@ -31,7 +33,7 @@ export function AppLayout() {
                   }
                 >
                   <Icono className="size-5" aria-hidden />
-                  {etiqueta}
+                  {t.nav[etiqueta]}
                 </NavLink>
               </li>
             ))}
@@ -41,7 +43,7 @@ export function AppLayout() {
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-slate-200 bg-white px-4 md:hidden">
+        <header className="bg-surface sticky top-0 z-20 flex h-14 items-center justify-between border-b border-slate-200 px-4 md:hidden">
           <Link to="/" className="flex items-center gap-2 font-bold text-slate-900">
             <Droplets className="text-brand-600 size-6" aria-hidden />
             Minho Gloss
@@ -57,8 +59,8 @@ export function AppLayout() {
       </div>
 
       <nav
-        aria-label="Principal"
-        className="fixed inset-x-0 bottom-0 z-20 border-t border-slate-200 bg-white pb-[env(safe-area-inset-bottom)] md:hidden"
+        aria-label={t.nav.principal}
+        className="bg-surface fixed inset-x-0 bottom-0 z-20 border-t border-slate-200 pb-[env(safe-area-inset-bottom)] md:hidden"
       >
         <ul className="flex">
           {items.map(({ to, etiqueta, icono: Icono }) => (
@@ -74,7 +76,7 @@ export function AppLayout() {
                 }
               >
                 <Icono className="size-6" aria-hidden />
-                {etiqueta}
+                {t.nav[etiqueta]}
               </NavLink>
             </li>
           ))}

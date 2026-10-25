@@ -1,4 +1,6 @@
 import { env } from '@/shared/config/env';
+import { getTextos, LOCALE } from '@/shared/i18n/textos';
+import { usePreferenciasStore } from '@/shared/preferencias/store';
 
 /** Error de la API con el código HTTP y el mensaje en español que devuelve el backend. */
 export class ApiError extends Error {
@@ -21,7 +23,7 @@ export function mensajeDeError(error: unknown): string {
   if (error instanceof ApiError) {
     return error.message;
   }
-  return 'Ocurrió un error inesperado, intenta de nuevo';
+  return getTextos().comun.errorInesperado;
 }
 
 interface ApiErrorBody {
@@ -64,6 +66,8 @@ export function setAuthHandlers(handlers: AuthHandlers): void {
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const headers = new Headers(init?.headers);
   headers.set('Content-Type', 'application/json');
+  // La API devuelve sus mensajes en el idioma del usuario (spec auth).
+  headers.set('Accept-Language', LOCALE[usePreferenciasStore.getState().idioma]);
   const token = authHandlers.getToken();
   if (token) {
     headers.set('Authorization', `Bearer ${token}`);
@@ -73,7 +77,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   try {
     response = await fetch(`${env.apiUrl}${path}`, { ...init, headers });
   } catch {
-    throw new ApiError(0, ['No hay conexión con el servidor']);
+    throw new ApiError(0, [getTextos().comun.sinConexion]);
   }
 
   if (!response.ok) {

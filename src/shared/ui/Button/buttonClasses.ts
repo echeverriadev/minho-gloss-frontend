@@ -4,7 +4,7 @@ export type ButtonSize = 'md' | 'sm';
 // Compartidas por Button, IconButton, ButtonLink y los enlaces con forma de botón.
 export const buttonVariantClasses: Record<ButtonVariant, string> = {
   primary: 'bg-brand-600 text-white hover:bg-brand-700',
-  secondary: 'bg-white text-slate-900 ring-1 ring-slate-300 hover:bg-slate-100',
+  secondary: 'bg-surface text-slate-900 ring-1 ring-slate-300 hover:bg-slate-100',
   danger: 'bg-red-600 text-white hover:bg-red-700',
   ghost: 'text-slate-700 hover:bg-slate-100',
 };

@@ -10,18 +10,21 @@ import { SearchInput } from '@/shared/ui/SearchInput/SearchInput';
 import { Skeleton } from '@/shared/ui/Skeleton/Skeleton';
 import { useClientesBusqueda } from '../hooks/useClientesBusqueda';
 import { ClienteCard } from './ClienteCard';
+import { useTextos } from '@/shared/i18n/textos';
 
 function AgregarClienteLink() {
+  const t = useTextos();
   return (
     <ButtonLink to="/clientes/nuevo">
       <UserPlus className="size-5" aria-hidden />
-      Agregar cliente
+      {t.clientes.agregar}
     </ButtonLink>
   );
 }
 
 /** Lista de clientes con buscador; el texto buscado vive en la URL (`?q=`). */
 export function ClientesList() {
+  const t = useTextos();
   const [searchParams, setSearchParams] = useSearchParams();
   const [texto, setTexto] = useState(() => searchParams.get('q') ?? '');
   const q = useDebouncedValue(texto.trim(), 300);
@@ -39,8 +42,8 @@ export function ClientesList() {
       <div className="sticky top-14 z-10 -mx-4 flex flex-col gap-3 bg-slate-50 px-4 pt-1 pb-3 sm:flex-row md:top-0">
         <div className="flex-1">
           <SearchInput
-            label="Buscar clientes"
-            placeholder="Nombre, apellido, cédula o teléfono"
+            label={t.clientes.buscar}
+            placeholder={t.clientes.buscarPlaceholder}
             value={texto}
             onChange={handleBuscar}
             autoComplete="off"
@@ -51,7 +54,7 @@ export function ClientesList() {
 
       {!isLoading && !error && clientes.length > 0 && (
         <p className="text-sm text-slate-600" aria-live="polite">
-          {total === 1 ? '1 cliente' : `${total} clientes`}
+          {t.clientes.cantidad(total)}
         </p>
       )}
 
@@ -60,15 +63,15 @@ export function ClientesList() {
       {sinResultados && q && (
         <EmptyState
           icon={SearchX}
-          title={`No encontramos clientes con «${q}»`}
+          title={t.clientes.sinResultados(q)}
           action={<AgregarClienteLink />}
         />
       )}
       {sinResultados && !q && (
         <EmptyState
           icon={Users}
-          title="Aún no hay clientes"
-          description="Registra al primer cliente para empezar."
+          title={t.clientes.vacio}
+          description={t.clientes.vacioDescripcion}
           action={<AgregarClienteLink />}
         />
       )}
@@ -91,7 +94,7 @@ export function ClientesList() {
 
       {hayMas && !isLoading && (
         <Button variant="secondary" onClick={verMas} fullWidth>
-          Ver más
+          {t.comun.verMas}
         </Button>
       )}
     </div>

@@ -5,6 +5,7 @@ import { Badge } from '@/shared/ui/Badge/Badge';
 import { Card } from '@/shared/ui/Card/Card';
 import { IconButton } from '@/shared/ui/IconButton/IconButton';
 import type { TipoServicio } from '../types';
+import { useTextos } from '@/shared/i18n/textos';
 
 export interface TipoServicioCardProps {
   tipo: TipoServicio;
@@ -13,25 +14,26 @@ export interface TipoServicioCardProps {
 }
 
 export function TipoServicioCard({ tipo, onEditar, onDarDeBaja }: TipoServicioCardProps) {
+  const t = useTextos();
   return (
     <Card className="flex flex-col gap-3">
       <div className="flex items-start gap-2">
         <div className="min-w-0 flex-1">
           <p className="font-semibold text-slate-900">
-            {tipo.nombre} {!tipo.activo && <Badge tone="danger">Inactivo</Badge>}
+            {tipo.nombre} {!tipo.activo && <Badge tone="danger">{t.comun.inactivo}</Badge>}
           </p>
           {tipo.descripcion && <p className="text-sm text-slate-600">{tipo.descripcion}</p>}
         </div>
         {onEditar && (
           <IconButton
-            aria-label={`Editar ${tipo.nombre}`}
+            aria-label={t.catalogo.editar(tipo.nombre)}
             icon={<Pencil className="size-5" aria-hidden />}
             onClick={onEditar}
           />
         )}
         {onDarDeBaja && tipo.activo && (
           <IconButton
-            aria-label={`Dar de baja ${tipo.nombre}`}
+            aria-label={t.catalogo.darDeBajaAccion(tipo.nombre)}
             icon={<Trash2 className="size-5 text-red-700" aria-hidden />}
             onClick={onDarDeBaja}
           />

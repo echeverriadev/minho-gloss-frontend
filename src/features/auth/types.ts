@@ -1,16 +1,14 @@
+import type { Preferencias } from '@/shared/preferencias/store';
+
 export const ROLES = ['admin', 'empleado'] as const;
 export type Rol = (typeof ROLES)[number];
-
-export const ETIQUETA_ROL: Record<Rol, string> = {
-  admin: 'Administrador',
-  empleado: 'Empleado',
-};
 
 export interface UsuarioSesion {
   id: string;
   nombre: string;
   email: string;
   rol: Rol;
+  preferencias: Preferencias;
 }
 
 export interface LoginRequest {

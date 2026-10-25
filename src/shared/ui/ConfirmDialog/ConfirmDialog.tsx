@@ -1,6 +1,7 @@
 import { type ReactNode, useEffect, useId, useRef, useState } from 'react';
 import { Button } from '../Button/Button';
 import { Input } from '../Input/Input';
+import { useTextos } from '@/shared/i18n/textos';
 
 export interface ConfirmDialogProps {
   isOpen: boolean;
@@ -21,7 +22,7 @@ export function ConfirmDialog({
   title,
   description,
   confirmLabel,
-  cancelLabel = 'Cancelar',
+  cancelLabel,
   confirmText,
   isLoading = false,
   onConfirm,
@@ -29,6 +30,7 @@ export function ConfirmDialog({
 }: ConfirmDialogProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const titleId = useId();
+  const t = useTextos();
   const [escrito, setEscrito] = useState('');
 
   useEffect(() => {
@@ -54,7 +56,7 @@ export function ConfirmDialog({
         event.preventDefault();
         onCancel();
       }}
-      className="m-auto w-[calc(100%-2rem)] max-w-md rounded-xl bg-white p-0 shadow-xl"
+      className="bg-surface m-auto w-[calc(100%-2rem)] max-w-md rounded-xl p-0 shadow-xl"
     >
       <div className="flex flex-col gap-4 p-5">
         <h2 id={titleId} className="text-lg font-semibold text-slate-900">
@@ -63,7 +65,7 @@ export function ConfirmDialog({
         {description && <div className="text-slate-700">{description}</div>}
         {confirmText && (
           <Input
-            label={`Escribe «${confirmText}» para confirmar`}
+            label={t.comun.escribeParaConfirmar(confirmText)}
             value={escrito}
             onChange={(event) => setEscrito(event.target.value)}
             autoComplete="off"
@@ -71,7 +73,7 @@ export function ConfirmDialog({
         )}
         <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
           <Button variant="secondary" onClick={onCancel} disabled={isLoading}>
-            {cancelLabel}
+            {cancelLabel ?? t.comun.cancelar}
           </Button>
           <Button
             variant="danger"

@@ -7,6 +7,7 @@ import { Input } from '@/shared/ui/Input/Input';
 import { authApi } from '../api';
 import { FormAlert } from '@/shared/ui/FormAlert/FormAlert';
 import { EMAIL_PATTERN } from '@/shared/lib/validacion';
+import { useTextos } from '@/shared/i18n/textos';
 
 interface RecuperarForm {
   email: string;
@@ -14,6 +15,7 @@ interface RecuperarForm {
 
 export function RecuperarPasswordForm() {
   const [enviado, setEnviado] = useState(false);
+  const t = useTextos();
   const [errorApi, setErrorApi] = useState<string>();
   const {
     register,
@@ -34,15 +36,12 @@ export function RecuperarPasswordForm() {
   if (enviado) {
     return (
       <div className="flex flex-col gap-4">
-        <FormAlert tipo="success">
-          Si el correo está registrado, te enviamos un enlace para elegir una contraseña nueva.
-          Revisa tu bandeja de entrada.
-        </FormAlert>
+        <FormAlert tipo="success">{t.auth.enlaceEnviado}</FormAlert>
         <Link
           to="/login"
           className="text-brand-700 self-center py-2 text-sm font-medium hover:underline"
         >
-          Volver a iniciar sesión
+          {t.auth.volverALogin}
         </Link>
       </div>
     );
@@ -52,24 +51,24 @@ export function RecuperarPasswordForm() {
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4">
       {errorApi && <FormAlert tipo="error">{errorApi}</FormAlert>}
       <Input
-        label="Correo"
+        label={t.auth.correo}
         type="email"
         autoComplete="email"
         inputMode="email"
         error={errors.email?.message}
         {...register('email', {
-          required: 'El correo es obligatorio',
-          pattern: { value: EMAIL_PATTERN, message: 'El correo no es válido' },
+          required: t.validacion.emailObligatorio,
+          pattern: { value: EMAIL_PATTERN, message: t.validacion.emailInvalido },
         })}
       />
       <Button type="submit" isLoading={isSubmitting} fullWidth>
-        Enviar enlace
+        {t.auth.enviarEnlace}
       </Button>
       <Link
         to="/login"
         className="text-brand-700 self-center py-2 text-sm font-medium hover:underline"
       >
-        Volver a iniciar sesión
+        {t.auth.volverALogin}
       </Link>
     </form>
   );
