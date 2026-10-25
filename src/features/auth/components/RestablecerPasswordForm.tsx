@@ -7,8 +7,7 @@ import { authApi } from '../api';
 import { useSessionStore } from '../store';
 import { FormAlert } from '@/shared/ui/FormAlert/FormAlert';
 import { type NuevaPasswordForm, NuevaPasswordFields } from './NuevaPasswordFields';
-
-export const MENSAJE_ENLACE_INVALIDO = 'El enlace no es válido o ya venció, pide uno nuevo';
+import { useTextos } from '@/shared/i18n/textos';
 
 export interface RestablecerPasswordFormProps {
   token: string | null;
@@ -16,8 +15,9 @@ export interface RestablecerPasswordFormProps {
 
 export function RestablecerPasswordForm({ token }: RestablecerPasswordFormProps) {
   const navigate = useNavigate();
+  const t = useTextos();
   const [errorApi, setErrorApi] = useState<string | undefined>(
-    token ? undefined : MENSAJE_ENLACE_INVALIDO,
+    token ? undefined : t.auth.enlaceInvalido,
   );
   const form = useForm<NuevaPasswordForm>({
     defaultValues: { passwordNueva: '', confirmacion: '' },
@@ -35,12 +35,12 @@ export function RestablecerPasswordForm({ token }: RestablecerPasswordFormProps)
     try {
       await authApi.restablecerPassword({ token, password: passwordNueva });
       // Si había otra sesión abierta en este dispositivo, se cierra para entrar con la contraseña nueva.
-      useSessionStore.getState().cerrarSesion('Contraseña actualizada, ya puedes iniciar sesión');
+      useSessionStore.getState().cerrarSesion('passwordActualizada');
       await navigate('/login', { replace: true });
     } catch (error) {
       setErrorApi(
         error instanceof ApiError && error.status === 400
-          ? MENSAJE_ENLACE_INVALIDO
+          ? t.auth.enlaceInvalido
           : mensajeDeError(error),
       );
     }
@@ -53,7 +53,7 @@ export function RestablecerPasswordForm({ token }: RestablecerPasswordFormProps)
           <FormAlert tipo="error">
             {errorApi}{' '}
             <Link to="/recuperar-password" className="font-medium underline">
-              Pedir otro enlace
+              {t.auth.pedirOtroEnlace}
             </Link>
           </FormAlert>
         )}
@@ -61,7 +61,7 @@ export function RestablecerPasswordForm({ token }: RestablecerPasswordFormProps)
           <>
             <NuevaPasswordFields />
             <Button type="submit" isLoading={isSubmitting} fullWidth>
-              Guardar contraseña
+              {t.auth.guardarPassword}
             </Button>
           </>
         )}
@@ -69,7 +69,7 @@ export function RestablecerPasswordForm({ token }: RestablecerPasswordFormProps)
           to="/login"
           className="text-brand-700 self-center py-2 text-sm font-medium hover:underline"
         >
-          Volver a iniciar sesión
+          {t.auth.volverALogin}
         </Link>
       </form>
     </FormProvider>

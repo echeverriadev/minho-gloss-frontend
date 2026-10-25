@@ -7,22 +7,24 @@ import { ErrorState } from '@/shared/ui/ErrorState/ErrorState';
 import { PageHeader } from '@/shared/ui/PageHeader/PageHeader';
 import { Skeleton } from '@/shared/ui/Skeleton/Skeleton';
 import { toast } from '@/shared/ui/Toast/store';
+import { useTextos } from '@/shared/i18n/textos';
 
 export function ClienteEditarPage() {
   const { id = '' } = useParams();
   const navigate = useNavigate();
+  const t = useTextos();
   const { data: cliente, error, isLoading, reload } = useAsync(() => clientesApi.obtener(id), [id]);
   const volver = `/clientes/${id}`;
 
   const handleSubmit = async (datos: ClienteRequest) => {
     await clientesApi.editar(id, datos);
-    toast.success('Cliente guardado');
+    toast.success(t.clientes.guardado);
     await navigate(volver, { replace: true });
   };
 
   return (
     <>
-      <PageHeader title="Editar cliente" backTo={volver} backLabel="Volver a la ficha" />
+      <PageHeader title={t.clientes.editar} backTo={volver} backLabel={t.clientes.volverAFicha} />
       {isLoading && <Skeleton className="h-96 w-full" />}
       {error && <ErrorState message={mensajeDeError(error)} onRetry={reload} />}
       {cliente && !isLoading && (

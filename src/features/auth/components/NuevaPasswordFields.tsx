@@ -1,6 +1,7 @@
 import { useFormContext } from 'react-hook-form';
 import { PasswordInput } from '@/shared/ui/PasswordInput/PasswordInput';
 import { PASSWORD_MIN } from '../types';
+import { useTextos } from '@/shared/i18n/textos';
 
 export interface NuevaPasswordForm {
   passwordNueva: string;
@@ -9,6 +10,7 @@ export interface NuevaPasswordForm {
 
 /** Contraseña nueva y su confirmación, con las reglas de `domain-model`. Va dentro de un `FormProvider`. */
 export function NuevaPasswordFields() {
+  const t = useTextos();
   const {
     register,
     getValues,
@@ -17,26 +19,25 @@ export function NuevaPasswordFields() {
   return (
     <>
       <PasswordInput
-        label="Contraseña nueva"
+        label={t.auth.passwordNueva}
         autoComplete="new-password"
-        hint={`Al menos ${PASSWORD_MIN} caracteres`}
+        hint={t.auth.alMenosCaracteres(PASSWORD_MIN)}
         error={errors.passwordNueva?.message}
         {...register('passwordNueva', {
-          required: 'La contraseña nueva es obligatoria',
+          required: t.auth.passwordNuevaObligatoria,
           minLength: {
             value: PASSWORD_MIN,
-            message: `La contraseña debe tener al menos ${PASSWORD_MIN} caracteres`,
+            message: t.validacion.passwordMinimo(PASSWORD_MIN),
           },
         })}
       />
       <PasswordInput
-        label="Repite la contraseña nueva"
+        label={t.auth.repitePassword}
         autoComplete="new-password"
         error={errors.confirmacion?.message}
         {...register('confirmacion', {
-          required: 'Repite la contraseña nueva',
-          validate: (valor) =>
-            valor === getValues('passwordNueva') || 'Las contraseñas no coinciden',
+          required: t.auth.repitePasswordObligatoria,
+          validate: (valor) => valor === getValues('passwordNueva') || t.auth.passwordsNoCoinciden,
         })}
       />
     </>

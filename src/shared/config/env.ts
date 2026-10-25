@@ -4,7 +4,6 @@ const apiUrlPorDefecto = `${window.location.protocol}//${window.location.hostnam
 
 export const env = {
   apiUrl: import.meta.env.VITE_API_URL || apiUrlPorDefecto,
-  locale: import.meta.env.VITE_APP_LOCALE ?? 'es-ES',
   currency: import.meta.env.VITE_APP_CURRENCY ?? 'EUR',
   timeZone: import.meta.env.VITE_APP_TIMEZONE ?? 'Europe/Lisbon',
 };

@@ -9,6 +9,7 @@ import { MoneyInput } from '@/shared/ui/MoneyInput/MoneyInput';
 import { Textarea } from '@/shared/ui/Textarea/Textarea';
 import type { CategoriaServicio, ModoPrecio, TipoServicio, TipoServicioRequest } from '../types';
 import { OpcionesRadio } from './OpcionesRadio';
+import { useTextos } from '@/shared/i18n/textos';
 
 interface FormValues {
   nombre: string;
@@ -26,8 +27,6 @@ export interface TipoServicioFormProps {
   onSubmit: (datos: TipoServicioRequest) => Promise<void>;
   onCancel: () => void;
 }
-
-const MENSAJE_PRECIO = 'El precio es obligatorio';
 
 function toRequest(valores: FormValues): TipoServicioRequest {
   const base = {
@@ -59,6 +58,7 @@ export function TipoServicioForm({
   onSubmit,
   onCancel,
 }: TipoServicioFormProps) {
+  const t = useTextos();
   const [errorApi, setErrorApi] = useState<string>();
   const {
     register,
@@ -100,44 +100,43 @@ export function TipoServicioForm({
   };
 
   const precioRequerido = (modo: ModoPrecio) => (valor: number | null) =>
-    getValues('modoPrecio') !== modo || valor !== null || MENSAJE_PRECIO;
+    getValues('modoPrecio') !== modo || valor !== null || t.catalogo.v.precioObligatorio;
 
   return (
     <form onSubmit={handleSubmit(enviar)} noValidate className="flex flex-col gap-4">
       {errorApi && <FormAlert tipo="error">{errorApi}</FormAlert>}
       <Input
-        label="Título"
+        label={t.catalogo.tituloCampo}
         placeholder="EXPRESS GLOSS"
         error={errors.nombre?.message}
         {...register('nombre', {
           validate: (valor) =>
-            (valor.trim().length >= 2 && valor.trim().length <= 60) ||
-            'El título debe tener entre 2 y 60 caracteres',
+            (valor.trim().length >= 2 && valor.trim().length <= 60) || t.catalogo.v.tituloLongitud,
         })}
       />
       <Textarea
-        label="Descripción"
+        label={t.catalogo.descripcion}
         rows={2}
-        hint="Opcional, hasta 300 caracteres"
+        hint={t.catalogo.descripcionAyuda}
         error={errors.descripcion?.message}
         {...register('descripcion', {
-          maxLength: { value: 300, message: 'La descripción no puede superar los 300 caracteres' },
+          maxLength: { value: 300, message: t.catalogo.v.descripcionLongitud },
         })}
       />
       <OpcionesRadio
-        legend="Categoría"
+        legend={t.catalogo.categoria}
         opciones={[
-          { value: 'servicio', label: 'Servicio' },
-          { value: 'extra', label: 'Extra' },
+          { value: 'servicio', label: t.catalogo.categoriaServicio },
+          { value: 'extra', label: t.catalogo.categoriaExtra },
         ]}
         valorActual={categoria}
         registro={register('categoria')}
       />
       <OpcionesRadio
-        legend="Precio"
+        legend={t.catalogo.precio}
         opciones={[
-          { value: 'por-vehiculo', label: 'Según el vehículo' },
-          { value: 'unico', label: 'Precio único' },
+          { value: 'por-vehiculo', label: t.catalogo.segunVehiculo },
+          { value: 'unico', label: t.catalogo.precioUnico },
         ]}
         valorActual={modoPrecio}
         registro={register('modoPrecio')}
@@ -170,7 +169,7 @@ export function TipoServicioForm({
           rules={{ validate: precioRequerido('unico') }}
           render={({ field, fieldState }) => (
             <MoneyInput
-              label="Precio para cualquier vehículo"
+              label={t.catalogo.precioCualquierVehiculo}
               name={field.name}
               value={field.value}
               onChange={field.onChange}
@@ -181,24 +180,24 @@ export function TipoServicioForm({
         />
       )}
       <Input
-        label="Orden"
+        label={t.catalogo.orden}
         type="number"
         inputMode="numeric"
         min={0}
-        hint="Posición dentro de su categoría; los números más bajos van primero"
+        hint={t.catalogo.ordenAyuda}
         error={errors.orden?.message}
         {...register('orden', {
           valueAsNumber: true,
           validate: (valor) =>
-            (Number.isInteger(valor) && valor >= 0) || 'El orden debe ser 0 o mayor',
+            (Number.isInteger(valor) && valor >= 0) || t.catalogo.v.ordenInvalido,
         })}
       />
       <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
         <Button variant="secondary" onClick={onCancel} disabled={isSubmitting}>
-          Cancelar
+          {t.comun.cancelar}
         </Button>
         <Button type="submit" isLoading={isSubmitting}>
-          Guardar
+          {t.comun.guardar}
         </Button>
       </div>
     </form>

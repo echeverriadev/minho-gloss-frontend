@@ -1,11 +1,10 @@
 import { AuthCard, RecuperarPasswordForm } from '@/features/auth';
+import { useTextos } from '@/shared/i18n/textos';
 
 export function RecuperarPasswordPage() {
+  const t = useTextos();
   return (
-    <AuthCard
-      title="Recupera tu contraseña"
-      description="Escribe el correo de tu cuenta y te enviaremos un enlace para elegir una nueva."
-    >
+    <AuthCard title={t.auth.recuperarTitulo} description={t.auth.recuperarDescripcion}>
       <RecuperarPasswordForm />
     </AuthCard>
   );

@@ -14,19 +14,25 @@ import { useTiposServicio } from '../hooks/useTiposServicio';
 import type { CategoriaServicio, TipoServicio, TipoServicioRequest } from '../types';
 import { TipoServicioCard } from './TipoServicioCard';
 import { TipoServicioForm } from './TipoServicioForm';
+import { useTextos } from '@/shared/i18n/textos';
 
 type Accion =
   | { tipo: 'crear'; categoria: CategoriaServicio }
   | { tipo: 'editar' | 'baja'; entrada: TipoServicio }
   | null;
 
-const SECCIONES: { categoria: CategoriaServicio; titulo: string; agregar: string }[] = [
-  { categoria: 'servicio', titulo: 'Servicios', agregar: 'Agregar servicio' },
-  { categoria: 'extra', titulo: 'Extras', agregar: 'Agregar extra' },
+const SECCIONES: {
+  categoria: CategoriaServicio;
+  titulo: 'servicios' | 'extras';
+  agregar: 'agregarServicio' | 'agregarExtra';
+}[] = [
+  { categoria: 'servicio', titulo: 'servicios', agregar: 'agregarServicio' },
+  { categoria: 'extra', titulo: 'extras', agregar: 'agregarExtra' },
 ];
 
 /** Catálogo de servicios y extras para el admin (spec catalogo-servicios). */
 export function TiposServicioGestion() {
+  const t = useTextos();
   const [incluirInactivos, setIncluirInactivos] = useState(false);
   const [accion, setAccion] = useState<Accion>(null);
   const [isEnviando, setIsEnviando] = useState(false);
@@ -39,7 +45,7 @@ export function TiposServicioGestion() {
     } else {
       await tiposServicioApi.crear(datos);
     }
-    toast.success('Servicio guardado');
+    toast.success(t.catalogo.guardado);
     cerrar();
     reload();
   };
@@ -51,7 +57,7 @@ export function TiposServicioGestion() {
     setIsEnviando(true);
     try {
       await tiposServicioApi.darDeBaja(accion.entrada.id);
-      toast.success('Servicio dado de baja');
+      toast.success(t.catalogo.dadoDeBaja);
       cerrar();
       reload();
     } catch (error_) {
@@ -66,7 +72,7 @@ export function TiposServicioGestion() {
   return (
     <div className="flex flex-col gap-6">
       <Checkbox
-        label="Ver también los dados de baja"
+        label={t.catalogo.verInactivos}
         checked={incluirInactivos}
         onChange={(event) => setIncluirInactivos(event.target.checked)}
       />
@@ -75,10 +81,10 @@ export function TiposServicioGestion() {
       {vacio && (
         <EmptyState
           icon={Sparkles}
-          title="Agrega tu primer servicio para poder registrar trabajos"
+          title={t.catalogo.vacio}
           action={
             <Button onClick={() => setAccion({ tipo: 'crear', categoria: 'servicio' })}>
-              Agregar servicio
+              {t.catalogo.agregarServicio}
             </Button>
           }
         />
@@ -93,7 +99,7 @@ export function TiposServicioGestion() {
           >
             <div className="flex items-center justify-between gap-2">
               <h2 id={`seccion-${categoria}`} className="text-lg font-semibold text-slate-900">
-                {titulo}
+                {t.catalogo[titulo]}
               </h2>
               <Button
                 size="sm"
@@ -101,7 +107,7 @@ export function TiposServicioGestion() {
                 onClick={() => setAccion({ tipo: 'crear', categoria })}
               >
                 <Plus className="size-4" aria-hidden />
-                {agregar}
+                {t.catalogo[agregar]}
               </Button>
             </div>
             <ul className="flex flex-col gap-2">
@@ -123,7 +129,9 @@ export function TiposServicioGestion() {
       <Dialog
         isOpen={accion?.tipo === 'crear' || accion?.tipo === 'editar'}
         title={
-          accion?.tipo === 'editar' ? `Editar ${accion.entrada.nombre}` : 'Agregar al catálogo'
+          accion?.tipo === 'editar'
+            ? t.catalogo.editar(accion.entrada.nombre)
+            : t.catalogo.agregarAlCatalogo
         }
         onClose={cerrar}
       >
@@ -136,9 +144,9 @@ export function TiposServicioGestion() {
       </Dialog>
       <ConfirmDialog
         isOpen={accion?.tipo === 'baja'}
-        title={accion?.tipo === 'baja' ? `¿Dar de baja ${accion.entrada.nombre}?` : ''}
-        description="Dejará de ofrecerse al registrar servicios. El historial y las métricas pasadas no cambian."
-        confirmLabel="Dar de baja"
+        title={accion?.tipo === 'baja' ? t.catalogo.darDeBajaTitulo(accion.entrada.nombre) : ''}
+        description={t.catalogo.darDeBajaTexto}
+        confirmLabel={t.catalogo.darDeBaja}
         isLoading={isEnviando}
         onConfirm={() => void handleBaja()}
         onCancel={cerrar}
