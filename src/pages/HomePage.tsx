@@ -1,44 +1,31 @@
-import { Droplets } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
-import { apiClient } from '@/shared/lib/apiClient';
-import { Button } from '@/shared/ui/Button/Button';
-
-type HealthStatus = 'checking' | 'ok' | 'error';
+import { Settings, UserPlus, Users } from 'lucide-react';
+import { useIsAdmin, useUsuarioActual } from '@/features/auth';
+import { ButtonLink } from '@/shared/ui/ButtonLink/ButtonLink';
+import { Card } from '@/shared/ui/Card/Card';
 
 export function HomePage() {
-  const [status, setStatus] = useState<HealthStatus>('checking');
-
-  const checkHealth = useCallback(
-    () =>
-      apiClient.get<{ status: string }>('/health').then(
-        () => setStatus('ok'),
-        () => setStatus('error'),
-      ),
-    [],
-  );
-
-  useEffect(() => {
-    void checkHealth();
-  }, [checkHealth]);
-
-  const retry = () => {
-    setStatus('checking');
-    void checkHealth();
-  };
-
+  const usuario = useUsuarioActual();
+  const isAdmin = useIsAdmin();
   return (
-    <main className="mx-auto flex min-h-dvh max-w-md flex-col items-center justify-center gap-6 p-6 text-center">
-      <Droplets className="text-brand-600 size-12" aria-hidden />
-      <h1 className="text-2xl font-bold">Minho Gloss</h1>
-      <p className="text-slate-600">
-        API:{' '}
-        <span className="font-medium">
-          {status === 'checking' && 'verificando…'}
-          {status === 'ok' && 'conectada'}
-          {status === 'error' && 'sin conexión'}
-        </span>
-      </p>
-      <Button onClick={retry}>Reintentar</Button>
-    </main>
+    <div className="flex flex-col gap-4">
+      <h1 className="text-2xl font-bold text-slate-900">Hola, {usuario.nombre.split(' ')[0]}</h1>
+      <Card className="flex flex-col gap-3">
+        <p className="text-slate-700">¿Qué quieres hacer?</p>
+        <ButtonLink to="/clientes/nuevo" fullWidth>
+          <UserPlus className="size-5" aria-hidden />
+          Agregar cliente
+        </ButtonLink>
+        <ButtonLink to="/clientes" variant="secondary" fullWidth>
+          <Users className="size-5" aria-hidden />
+          Buscar un cliente
+        </ButtonLink>
+        {isAdmin && (
+          <ButtonLink to="/ajustes/usuarios" variant="secondary" fullWidth>
+            <Settings className="size-5" aria-hidden />
+            Gestionar usuarios
+          </ButtonLink>
+        )}
+      </Card>
+    </div>
   );
 }

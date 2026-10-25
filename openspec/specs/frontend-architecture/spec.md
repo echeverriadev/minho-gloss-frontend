@@ -32,6 +32,7 @@ Las rutas SHALL definirse en `src/app/router.tsx` con nombres en español y en `
 | Ruta | Página | Rol |
 | --- | --- | --- |
 | `/login` | Inicio de sesión | público |
+| `/recuperar-password` · `/restablecer-password` | Recuperar la contraseña por correo | público |
 | `/` | Inicio: registrar servicio y servicios del día | cualquiera |
 | `/servicios` · `/servicios/nuevo` | Servicios prestados y registro | cualquiera |
 | `/clientes` · `/clientes/nuevo` · `/clientes/:id` · `/clientes/:id/editar` | Clientes | cualquiera |
@@ -41,6 +42,10 @@ Las rutas SHALL definirse en `src/app/router.tsx` con nombres en español y en `
 | `/perfil` | Datos propios y cambio de contraseña | cualquiera |
 
 Las páginas SHALL cargarse con `lazy` del router para dividir el código por ruta. Una ruta desconocida SHALL mostrar una página "No encontrada" con enlace al inicio.
+
+#### Scenario: Enlace del correo de recuperación
+- **WHEN** alguien sin sesión abre `/restablecer-password?token=abc`
+- **THEN** ve el formulario para elegir una contraseña nueva sin que la app lo mande a `/login`
 
 #### Scenario: Ruta inexistente
 - **WHEN** se abre `/no-existe`
