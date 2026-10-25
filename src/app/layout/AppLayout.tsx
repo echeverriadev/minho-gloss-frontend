@@ -13,7 +13,7 @@ export function AppLayout() {
 
   return (
     <div className="min-h-dvh md:flex">
-      <aside className="md:bg-surface hidden md:sticky md:top-0 md:flex md:h-dvh md:w-60 md:shrink-0 md:flex-col md:gap-6 md:border-r md:border-slate-200 md:p-4">
+      <aside className="md:bg-surface hidden md:sticky md:top-0 md:flex md:h-dvh md:w-60 md:shrink-0 md:flex-col md:gap-6 md:border-r md:border-slate-200 md:p-4 print:hidden">
         <Link to="/" className="flex items-center gap-2 px-2 text-lg font-bold text-slate-900">
           <Droplets className="text-brand-600 size-7" aria-hidden />
           Minho Gloss
@@ -43,7 +43,7 @@ export function AppLayout() {
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="bg-surface sticky top-0 z-20 flex h-14 items-center justify-between border-b border-slate-200 px-4 md:hidden">
+        <header className="bg-surface sticky top-0 z-20 flex h-14 items-center justify-between border-b border-slate-200 px-4 md:hidden print:hidden">
           <Link to="/" className="flex items-center gap-2 font-bold text-slate-900">
             <Droplets className="text-brand-600 size-6" aria-hidden />
             Minho Gloss
@@ -53,14 +53,14 @@ export function AppLayout() {
           </Link>
         </header>
 
-        <main className="mx-auto w-full max-w-3xl flex-1 px-4 pt-4 pb-24 md:pt-8 md:pb-10">
+        <main className="mx-auto w-full max-w-3xl flex-1 px-4 pt-4 pb-24 md:pt-8 md:pb-10 print:p-0">
           <Outlet />
         </main>
       </div>
 
       <nav
         aria-label={t.nav.principal}
-        className="bg-surface fixed inset-x-0 bottom-0 z-20 border-t border-slate-200 pb-[env(safe-area-inset-bottom)] md:hidden"
+        className="bg-surface fixed inset-x-0 bottom-0 z-20 border-t border-slate-200 pb-[env(safe-area-inset-bottom)] md:hidden print:hidden"
       >
         <ul className="flex">
           {items.map(({ to, etiqueta, icono: Icono }) => (

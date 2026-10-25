@@ -6,6 +6,15 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y l
 
 ## [Sin publicar]
 
+### Agregado
+
+- **Inicio con el registro rápido (fase 3):** botón "Registrar servicio", resumen del día (el total cobrado solo lo ve el admin) y los últimos servicios de hoy.
+- **Registrar servicio** en una sola pantalla: cliente opcional (buscar o crear uno nuevo sin salir), tipo de vehículo y placa, servicios y extras con su precio según el vehículo, método de pago recordado en el dispositivo, notas y total siempre a la vista.
+- **Precios personalizados del admin:** cambiar el precio de un servicio elegido (se muestra el descuento) o agregar un servicio fuera del catálogo, sin tocar el catálogo.
+- **Servicios del día** (`/servicios`) con resumen y, para el admin, elección de días.
+- **Detalle de la atención imprimible** con número, cliente, vehículo, precios de lista y cobrados, descuentos y total, más corrección de pago y notas y anulación con motivo para el admin.
+- **Historial de servicios** y botón "Registrar servicio" en la ficha del cliente.
+
 ## [0.2.0] - 2026-10-25
 
 Primera versión publicada. Incluye las fases 0, 1 y 2 del roadmap: entorno, especificaciones y las primeras pantallas de la app (acceso, usuarios, clientes, catálogo de servicios y preferencias).

@@ -6,7 +6,7 @@ Estructura y reglas técnicas del frontend de Minho Gloss (React + Vite + TypeSc
 ## Requirements
 
 ### Requirement: Estructura por funcionalidades
-El código SHALL organizarse en `src/app/` (arranque, router, layout y guards de rutas), `src/pages/` (una página por ruta, solo composición), `src/features/<funcionalidad>/` (componentes, hooks, API, tipos y estado de cada dominio), `src/shared/` (`ui`, `lib`, `config`, `hooks`) y `src/styles/`. Los imports entre carpetas SHALL usar el alias `@/` para `src/`. Las features previstas para la v1 SHALL ser `auth`, `usuarios`, `clientes`, `tipos-servicio`, `servicios-prestados`, `metricas` y `post-venta`.
+El código SHALL organizarse en `src/app/` (arranque, router, layout y guards de rutas), `src/pages/` (una página por ruta, solo composición), `src/features/<funcionalidad>/` (componentes, hooks, API, tipos y estado de cada dominio), `src/shared/` (`ui`, `lib`, `config`, `hooks`) y `src/styles/`. Los imports entre carpetas SHALL usar el alias `@/` para `src/`. Las features previstas para la v1 SHALL ser `auth`, `usuarios`, `clientes`, `tipos-servicio`, `atenciones`, `metricas` y `post-venta`.
 
 #### Scenario: Agregar la gestión de clientes
 - **WHEN** se implementa la pantalla de clientes
@@ -34,7 +34,7 @@ Las rutas SHALL definirse en `src/app/router.tsx` con nombres en español y en `
 | `/login` | Inicio de sesión | público |
 | `/recuperar-password` · `/restablecer-password` | Recuperar la contraseña por correo | público |
 | `/` | Inicio: registrar servicio y servicios del día | cualquiera |
-| `/servicios` · `/servicios/nuevo` | Servicios prestados y registro | cualquiera |
+| `/servicios` · `/servicios/nuevo` · `/servicios/:id` | Atenciones del día, registro y detalle imprimible | cualquiera |
 | `/clientes` · `/clientes/nuevo` · `/clientes/:id` · `/clientes/:id/editar` | Clientes | cualquiera |
 | `/post-venta` | Recordatorios a contactar | cualquiera |
 | `/metricas` | Métricas | admin |
