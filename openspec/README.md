@@ -13,6 +13,10 @@ Mapa de las especificaciones del frontend. Las reglas de cómo se usan están en
 | [`code-style`](specs/code-style/spec.md) | Prettier, oxlint, TypeScript, nombres, exports, React, Tailwind, accesibilidad, textos, `npm run check` y CI | No |
 | [`frontend-architecture`](specs/frontend-architecture/spec.md) | Estructura por features, mapa de rutas, mobile first, estado, API, carga/error, formularios y Storybook | No |
 | [`dev-environment`](specs/dev-environment/spec.md) | Docker Compose, recarga en caliente, Storybook, variables de entorno, imagen de producción | No |
+| [`app-shell`](specs/app-shell/spec.md) | Layout, navegación por rol, componentes compartidos, carga/error/avisos | No |
+| [`sesion`](specs/sesion/spec.md) | Login, recuperación de contraseña por correo, sesión persistente, rutas protegidas y perfil | No |
+| [`gestion-usuarios`](specs/gestion-usuarios/spec.md) | Pantallas del admin para las cuentas del negocio | No |
+| [`gestion-clientes`](specs/gestion-clientes/spec.md) | Buscar, ver, crear, editar, dar de baja y anonimizar clientes | No |
 
 Decisiones técnicas y sugerencias pendientes: [`decisiones-tecnicas.md`](decisiones-tecnicas.md) (compartido con el backend).
 
@@ -20,11 +24,11 @@ Decisiones técnicas y sugerencias pendientes: [`decisiones-tecnicas.md`](decisi
 
 Orden sugerido de implementación en la fase 3 del roadmap. Cada cambio de pantallas depende del cambio equivalente del backend.
 
+Ya implementados y archivados en `changes/archive/`: `add-app-shell`, `add-auth-ui` y `add-clientes-ui`.
+
 | # | Cambio | Capacidades nuevas | Depende del backend | Resumen |
 | --- | --- | --- | --- | --- |
-| 1 | [`add-app-shell`](changes/add-app-shell/proposal.md) | `app-shell` | — | Layout mobile first, navegación por rol, kit de componentes con Storybook, carga/error/avisos |
-| 2 | [`add-auth-ui`](changes/add-auth-ui/proposal.md) | `sesion`, `gestion-usuarios` | `add-auth` | Login, sesión persistente, rutas protegidas, perfil y usuarios |
-| 3 | [`add-clientes-ui`](changes/add-clientes-ui/proposal.md) | `gestion-clientes` | `add-clientes` | Búsqueda por nombre/teléfono/placa, ficha, alta con vehículos, contacto rápido |
+| 3b | [`add-vehiculos-ui`](changes/add-vehiculos-ui/proposal.md) | `vehiculos-cliente` | `add-vehiculos` | Vehículos desde la ficha, alta con vehículos, búsqueda por placa, historial |
 | 4 | [`add-catalogo-servicios-ui`](changes/add-catalogo-servicios-ui/proposal.md) | `catalogo-servicios` | `add-catalogo-servicios` | Ajustes del admin: tipos de servicio y precios por vehículo |
 | 5 | [`add-registro-servicios-ui`](changes/add-registro-servicios-ui/proposal.md) | `registro-servicios` | `add-servicios-prestados` | Registro en menos de 30 s desde la placa, servicios del día, anulación |
 | 6 | [`add-metricas-ui`](changes/add-metricas-ui/proposal.md) | `panel-metricas` | `add-metricas` | Panel por periodo, variación, gráfico diario, desgloses, inactivos |
@@ -34,9 +38,9 @@ Orden sugerido de implementación en la fase 3 del roadmap. Cada cambio de panta
 
 ```bash
 docker compose exec web npx openspec list                    # cambios en curso
-docker compose exec web npx openspec show add-clientes-ui    # ver un cambio
+docker compose exec web npx openspec show add-vehiculos-ui    # ver un cambio
 docker compose exec web npm run specs:validate               # validar specs y cambios
-docker compose exec web npx openspec archive add-clientes-ui # al integrar el PR
+docker compose exec web npx openspec archive add-vehiculos-ui # al integrar el PR
 ```
 
 Con Claude Code: `/opsx:propose`, `/opsx:apply <cambio>`, `/opsx:archive <cambio>`.

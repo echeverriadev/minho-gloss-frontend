@@ -31,3 +31,32 @@ export function formatFecha(fechaIso: string): string {
 export function formatFechaHora(fechaIso: string): string {
   return fechaHoraFormatter.format(new Date(fechaIso));
 }
+
+const fechaCalendarioFormatter = new Intl.DateTimeFormat(env.locale, {
+  timeZone: 'UTC',
+  dateStyle: 'long',
+});
+
+/** Formatea una fecha de calendario `YYYY-MM-DD` (sin hora), por ejemplo una fecha de nacimiento. */
+export function formatFechaCalendario(fecha: string): string {
+  return fechaCalendarioFormatter.format(new Date(`${fecha}T00:00:00Z`));
+}
+
+/** Hoy como `YYYY-MM-DD` en la zona del negocio. */
+export function hoyIso(ahora = new Date()): string {
+  return new Intl.DateTimeFormat('en-CA', { timeZone: env.timeZone }).format(ahora);
+}
+
+/** Años cumplidos a hoy a partir de una fecha `YYYY-MM-DD`. */
+export function calcularEdad(fechaNacimiento: string, hoy = hoyIso()): number {
+  const [anio, mes, dia] = fechaNacimiento.split('-').map(Number);
+  const [anioHoy, mesHoy, diaHoy] = hoy.split('-').map(Number);
+  const yaCumplio = mesHoy > mes || (mesHoy === mes && diaHoy >= dia);
+  return anioHoy - anio - (yaCumplio ? 0 : 1);
+}
+
+/** Muestra un teléfono E.164 portugués en grupos legibles: `+351 912 345 678`. */
+export function formatTelefono(telefono: string): string {
+  const match = /^\+351(\d{3})(\d{3})(\d{3})$/.exec(telefono);
+  return match ? `+351 ${match[1]} ${match[2]} ${match[3]}` : telefono;
+}
