@@ -1,9 +1,15 @@
-import { ChevronRight, Users } from 'lucide-react';
+import { ChevronRight, Sparkles, Users } from 'lucide-react';
 import { Link } from 'react-router';
 import { PageHeader } from '@/shared/ui/PageHeader/PageHeader';
 
-// TODO(add-catalogo-servicios-ui, add-post-venta-ui): sumar tipos de servicio y post-venta.
+// TODO(add-post-venta-ui): sumar la configuración de post-venta.
 const SECCIONES = [
+  {
+    to: '/ajustes/tipos-servicio',
+    titulo: 'Servicios y extras',
+    descripcion: 'Títulos, descripciones y precios para Ligeiro, SUV, Monovolume y Carrinha',
+    icono: Sparkles,
+  },
   {
     to: '/ajustes/usuarios',
     titulo: 'Usuarios',
