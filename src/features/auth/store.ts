@@ -1,9 +1,11 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { setAuthHandlers } from '@/shared/lib/apiClient';
+import { type Preferencias, usePreferenciasStore } from '@/shared/preferencias/store';
 import type { LoginResponse, UsuarioSesion } from './types';
 
-export const MENSAJE_SESION_VENCIDA = 'Tu sesión venció, inicia sesión de nuevo';
+/** Avisos que muestra el login; el texto depende del idioma. */
+export type AvisoLogin = 'sesionVencida' | 'passwordActualizada';
 
 interface SessionState {
   token: string | null;
@@ -11,10 +13,12 @@ interface SessionState {
   expiresAt: number | null;
   usuario: UsuarioSesion | null;
   /** Aviso para mostrar en el login (por ejemplo, sesión vencida). Se borra al leerlo. */
-  avisoLogin: string | null;
+  avisoLogin: AvisoLogin | null;
   iniciarSesion: (respuesta: LoginResponse) => void;
-  cerrarSesion: (aviso?: string) => void;
-  tomarAvisoLogin: () => string | null;
+  cerrarSesion: (aviso?: AvisoLogin) => void;
+  tomarAvisoLogin: () => AvisoLogin | null;
+  /** Guarda en la sesión las preferencias que el usuario acaba de cambiar. */
+  actualizarPreferencias: (preferencias: Preferencias) => void;
 }
 
 export const useSessionStore = create<SessionState>()(
@@ -24,13 +28,23 @@ export const useSessionStore = create<SessionState>()(
       expiresAt: null,
       usuario: null,
       avisoLogin: null,
-      iniciarSesion: ({ accessToken, expiresIn, usuario }) =>
+      iniciarSesion: ({ accessToken, expiresIn, usuario }) => {
         set({
           token: accessToken,
           expiresAt: Date.now() + expiresIn * 1000,
           usuario,
           avisoLogin: null,
-        }),
+        });
+        // El idioma y el tema del usuario se aplican en cualquier dispositivo donde entre.
+        usePreferenciasStore.getState().aplicar(usuario.preferencias);
+      },
+      actualizarPreferencias: (preferencias) => {
+        const { usuario } = get();
+        if (usuario) {
+          set({ usuario: { ...usuario, preferencias } });
+        }
+        usePreferenciasStore.getState().aplicar(preferencias);
+      },
       cerrarSesion: (aviso) =>
         set({ token: null, expiresAt: null, usuario: null, avisoLogin: aviso ?? null }),
       tomarAvisoLogin: () => {
@@ -57,14 +71,14 @@ export function isSesionVigente(expiresAt: number | null, ahora = Date.now()): b
 export function iniciarAuth(): void {
   const { token, expiresAt, cerrarSesion } = useSessionStore.getState();
   if (token && !isSesionVigente(expiresAt)) {
-    cerrarSesion(MENSAJE_SESION_VENCIDA);
+    cerrarSesion('sesionVencida');
   }
   setAuthHandlers({
     getToken: () => {
       const estado = useSessionStore.getState();
       return estado.token && isSesionVigente(estado.expiresAt) ? estado.token : undefined;
     },
-    onUnauthorized: () => useSessionStore.getState().cerrarSesion(MENSAJE_SESION_VENCIDA),
+    onUnauthorized: () => useSessionStore.getState().cerrarSesion('sesionVencida'),
   });
 }
 

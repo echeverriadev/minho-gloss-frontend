@@ -4,6 +4,8 @@ App web (mobile first) para gestionar el autolavado Minho Gloss: clientes, servi
 
 **Stack:** React 19 · Vite · TypeScript · React Router · Tailwind CSS 4 · Lucide React · React Hook Form · Zustand (si hace falta) · Storybook · oxlint · Prettier · OpenSpec
 
+**Versión actual:** 0.2.0 · Cambios en [`CHANGELOG.md`](CHANGELOG.md) · Versionado con SemVer Simplificado (ver la spec `git-workflow`).
+
 ## Requisitos
 
 Solo **Docker** y **Docker Compose** (Docker Desktop en Windows/macOS). No hace falta instalar Node.js.

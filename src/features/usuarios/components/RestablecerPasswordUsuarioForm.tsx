@@ -5,6 +5,7 @@ import { mensajeDeError } from '@/shared/lib/apiClient';
 import { Button } from '@/shared/ui/Button/Button';
 import { FormAlert } from '@/shared/ui/FormAlert/FormAlert';
 import { PasswordInput } from '@/shared/ui/PasswordInput/PasswordInput';
+import { useTextos } from '@/shared/i18n/textos';
 
 export interface RestablecerPasswordUsuarioFormProps {
   nombre: string;
@@ -17,6 +18,7 @@ export function RestablecerPasswordUsuarioForm({
   onSubmit,
   onCancel,
 }: RestablecerPasswordUsuarioFormProps) {
+  const t = useTextos();
   const [errorApi, setErrorApi] = useState<string>();
   const {
     register,
@@ -35,28 +37,26 @@ export function RestablecerPasswordUsuarioForm({
 
   return (
     <form onSubmit={handleSubmit(enviar)} noValidate className="flex flex-col gap-4">
-      <p className="text-slate-700">
-        Escribe una contraseña nueva para <strong>{nombre}</strong>. La actual dejará de funcionar.
-      </p>
+      <p className="text-slate-700">{t.usuarios.restablecerTexto(nombre)}</p>
       {errorApi && <FormAlert tipo="error">{errorApi}</FormAlert>}
       <PasswordInput
-        label="Contraseña nueva"
+        label={t.auth.passwordNueva}
         autoComplete="new-password"
         error={errors.password?.message}
         {...register('password', {
-          required: 'La contraseña es obligatoria',
+          required: t.validacion.passwordObligatoria,
           minLength: {
             value: PASSWORD_MIN,
-            message: `La contraseña debe tener al menos ${PASSWORD_MIN} caracteres`,
+            message: t.validacion.passwordMinimo(PASSWORD_MIN),
           },
         })}
       />
       <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
         <Button variant="secondary" onClick={onCancel} disabled={isSubmitting}>
-          Cancelar
+          {t.comun.cancelar}
         </Button>
         <Button type="submit" isLoading={isSubmitting}>
-          Restablecer contraseña
+          {t.usuarios.restablecer}
         </Button>
       </div>
     </form>

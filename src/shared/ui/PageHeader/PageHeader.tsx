@@ -1,6 +1,7 @@
 import { ArrowLeft } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { Link } from 'react-router';
+import { useTextos } from '@/shared/i18n/textos';
 
 export interface PageHeaderProps {
   title: string;
@@ -10,13 +11,14 @@ export interface PageHeaderProps {
   actions?: ReactNode;
 }
 
-export function PageHeader({ title, backTo, backLabel = 'Volver', actions }: PageHeaderProps) {
+export function PageHeader({ title, backTo, backLabel, actions }: PageHeaderProps) {
+  const t = useTextos();
   return (
     <div className="mb-4 flex items-center gap-2">
       {backTo && (
         <Link
           to={backTo}
-          aria-label={backLabel}
+          aria-label={backLabel ?? t.comun.volver}
           className="-ml-2 flex size-11 shrink-0 items-center justify-center rounded-lg text-slate-700 hover:bg-slate-100"
         >
           <ArrowLeft className="size-5" aria-hidden />

@@ -1,10 +1,11 @@
 import { CircleAlert, CircleCheck, X } from 'lucide-react';
 import { cn } from '@/shared/lib/cn';
 import { type ToastTipo, useToastStore } from './store';
+import { useTextos } from '@/shared/i18n/textos';
 
 const tipoClasses: Record<ToastTipo, string> = {
-  success: 'bg-slate-900 text-white',
-  error: 'bg-red-700 text-white',
+  success: 'bg-slate-900 text-slate-50',
+  error: 'bg-red-600 text-white',
 };
 
 export interface ToasterProps {
@@ -15,6 +16,7 @@ export interface ToasterProps {
 export function Toaster({ className }: ToasterProps) {
   const toasts = useToastStore((state) => state.toasts);
   const cerrar = useToastStore((state) => state.cerrar);
+  const t = useTextos();
   return (
     <div
       aria-live="polite"
@@ -40,7 +42,7 @@ export function Toaster({ className }: ToasterProps) {
           <button
             type="button"
             onClick={() => cerrar(item.id)}
-            aria-label="Cerrar aviso"
+            aria-label={t.comun.cerrarAviso}
             className="-mr-2 flex size-11 items-center justify-center rounded-lg opacity-80 hover:opacity-100"
           >
             <X className="size-4" aria-hidden />

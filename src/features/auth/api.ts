@@ -1,4 +1,5 @@
 import { apiClient } from '@/shared/lib/apiClient';
+import type { Preferencias } from '@/shared/preferencias/store';
 import type {
   CambiarPasswordRequest,
   LoginRequest,
@@ -15,4 +16,6 @@ export const authApi = {
   recuperarPassword: (email: string) => apiClient.post<void>('/auth/recuperar-password', { email }),
   restablecerPassword: (datos: RestablecerPasswordRequest) =>
     apiClient.post<void>('/auth/restablecer-password', datos),
+  actualizarPreferencias: (datos: Partial<Preferencias>) =>
+    apiClient.patch<Preferencias>('/auth/preferencias', datos),
 };

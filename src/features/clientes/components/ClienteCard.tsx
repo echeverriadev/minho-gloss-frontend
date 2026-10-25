@@ -11,7 +11,7 @@ export function ClienteCard({ cliente }: ClienteCardProps) {
   return (
     <Link
       to={`/clientes/${cliente.id}`}
-      className="focus-visible:outline-brand-600 flex min-h-16 items-center gap-3 rounded-xl bg-white p-4 shadow-sm ring-1 ring-slate-200 hover:bg-slate-50 focus-visible:outline-2"
+      className="focus-visible:outline-brand-600 bg-surface flex min-h-16 items-center gap-3 rounded-xl p-4 shadow-sm ring-1 ring-slate-200 hover:bg-slate-50 focus-visible:outline-2"
     >
       <div className="min-w-0 flex-1">
         <p className="truncate font-medium text-slate-900">{nombreCompleto(cliente)}</p>

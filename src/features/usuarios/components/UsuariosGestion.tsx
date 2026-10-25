@@ -16,12 +16,14 @@ import type { Usuario } from '../types';
 import { RestablecerPasswordUsuarioForm } from './RestablecerPasswordUsuarioForm';
 import { UsuarioForm, type UsuarioFormValues } from './UsuarioForm';
 import { UsuarioItem } from './UsuarioItem';
+import { useTextos } from '@/shared/i18n/textos';
 
 type Accion =
   { tipo: 'crear' } | { tipo: 'editar' | 'restablecer' | 'desactivar'; usuario: Usuario } | null;
 
 /** Pantalla del admin para administrar las cuentas del negocio (spec gestion-usuarios). */
 export function UsuariosGestion() {
+  const t = useTextos();
   const actual = useUsuarioActual();
   const [incluirInactivos, setIncluirInactivos] = useState(false);
   const [accion, setAccion] = useState<Accion>(null);
@@ -35,10 +37,10 @@ export function UsuariosGestion() {
   const handleGuardar = async (valores: UsuarioFormValues) => {
     if (accion?.tipo === 'editar') {
       await usuariosApi.editar(accion.usuario.id, { nombre: valores.nombre, rol: valores.rol });
-      toast.success('Usuario actualizado');
+      toast.success(t.usuarios.actualizado);
     } else {
       await usuariosApi.crear(valores);
-      toast.success('Usuario creado');
+      toast.success(t.usuarios.creado);
     }
     cerrar();
     reload();
@@ -49,7 +51,7 @@ export function UsuariosGestion() {
       return;
     }
     await usuariosApi.restablecerPassword(accion.usuario.id, password);
-    toast.success('Contraseña restablecida');
+    toast.success(t.usuarios.passwordRestablecida);
     cerrar();
   };
 
@@ -60,7 +62,7 @@ export function UsuariosGestion() {
     setIsDesactivando(true);
     try {
       await usuariosApi.desactivar(accion.usuario.id);
-      toast.success('Usuario desactivado');
+      toast.success(t.usuarios.desactivado);
       cerrar();
       reload();
     } catch (error_) {
@@ -73,7 +75,7 @@ export function UsuariosGestion() {
   const handleReactivar = async (usuario: Usuario) => {
     try {
       await usuariosApi.editar(usuario.id, { activo: true });
-      toast.success('Usuario reactivado');
+      toast.success(t.usuarios.reactivado);
       reload();
     } catch (error_) {
       toast.error(mensajeDeError(error_));
@@ -84,19 +86,19 @@ export function UsuariosGestion() {
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <Checkbox
-          label="Ver también los inactivos"
+          label={t.usuarios.verInactivos}
           checked={incluirInactivos}
           onChange={(event) => setIncluirInactivos(event.target.checked)}
         />
         <Button onClick={() => setAccion({ tipo: 'crear' })}>
           <UserPlus className="size-5" aria-hidden />
-          Agregar usuario
+          {t.usuarios.agregar}
         </Button>
       </div>
 
       {isLoading && !data && <Skeleton className="h-24 w-full" />}
       {error && <ErrorState message={mensajeDeError(error)} onRetry={reload} />}
-      {data?.items.length === 0 && <EmptyState icon={Users} title="No hay usuarios para mostrar" />}
+      {data?.items.length === 0 && <EmptyState icon={Users} title={t.usuarios.ninguno} />}
       <ul className="flex flex-col gap-2">
         {data?.items.map((usuario) => (
           <li key={usuario.id}>
@@ -114,7 +116,7 @@ export function UsuariosGestion() {
 
       <Dialog
         isOpen={accion?.tipo === 'crear' || accion?.tipo === 'editar'}
-        title={accion?.tipo === 'editar' ? 'Editar usuario' : 'Agregar usuario'}
+        title={accion?.tipo === 'editar' ? t.usuarios.editar : t.usuarios.agregar}
         onClose={cerrar}
       >
         <UsuarioForm
@@ -125,7 +127,7 @@ export function UsuariosGestion() {
       </Dialog>
       <Dialog
         isOpen={accion?.tipo === 'restablecer'}
-        title="Restablecer contraseña"
+        title={t.usuarios.restablecerTitulo}
         onClose={cerrar}
       >
         {accion?.tipo === 'restablecer' && (
@@ -138,9 +140,11 @@ export function UsuariosGestion() {
       </Dialog>
       <ConfirmDialog
         isOpen={accion?.tipo === 'desactivar'}
-        title={accion?.tipo === 'desactivar' ? `¿Desactivar a ${accion.usuario.nombre}?` : ''}
-        description="No podrá iniciar sesión hasta que lo reactives. Su historial se conserva."
-        confirmLabel="Desactivar"
+        title={
+          accion?.tipo === 'desactivar' ? t.usuarios.desactivarTitulo(accion.usuario.nombre) : ''
+        }
+        description={t.usuarios.desactivarTexto}
+        confirmLabel={t.usuarios.desactivar}
         isLoading={isDesactivando}
         onConfirm={() => void handleDesactivar()}
         onCancel={cerrar}

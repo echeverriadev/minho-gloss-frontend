@@ -7,6 +7,7 @@ import { ConfirmDialog } from '@/shared/ui/ConfirmDialog/ConfirmDialog';
 import { toast } from '@/shared/ui/Toast/store';
 import { clientesApi } from '../api';
 import { nombreCompleto, type Cliente } from '../types';
+import { useTextos } from '@/shared/i18n/textos';
 
 export interface ClienteAccionesAdminProps {
   cliente: Cliente;
@@ -17,6 +18,7 @@ type Accion = 'baja' | 'anonimizar' | null;
 /** Dar de baja y borrar datos personales (RGPD): solo para admin. */
 export function ClienteAccionesAdmin({ cliente }: ClienteAccionesAdminProps) {
   const navigate = useNavigate();
+  const t = useTextos();
   const [accion, setAccion] = useState<Accion>(null);
   const [isEnviando, setIsEnviando] = useState(false);
   const nombre = nombreCompleto(cliente);
@@ -37,45 +39,39 @@ export function ClienteAccionesAdmin({ cliente }: ClienteAccionesAdminProps) {
   return (
     <section aria-labelledby="acciones-admin" className="flex flex-col gap-3">
       <h2 id="acciones-admin" className="text-sm font-semibold text-slate-500 uppercase">
-        Administración
+        {t.clientes.administracion}
       </h2>
       <div className="flex flex-col gap-2 sm:flex-row">
         <Button variant="secondary" onClick={() => setAccion('baja')}>
           <UserX className="size-5" aria-hidden />
-          Dar de baja
+          {t.clientes.darDeBaja}
         </Button>
         <Button variant="ghost" className="text-red-700" onClick={() => setAccion('anonimizar')}>
           <ShieldX className="size-5" aria-hidden />
-          Borrar datos personales (RGPD)
+          {t.clientes.borrarDatos}
         </Button>
       </div>
 
       <ConfirmDialog
         isOpen={accion === 'baja'}
-        title={`¿Dar de baja a ${nombre}?`}
-        description="Dejará de aparecer en la lista de clientes. Su historial de servicios se conserva."
-        confirmLabel="Dar de baja"
+        title={t.clientes.darDeBajaTitulo(nombre)}
+        description={t.clientes.darDeBajaTexto}
+        confirmLabel={t.clientes.darDeBaja}
         isLoading={isEnviando}
         onConfirm={() =>
-          void ejecutar(() => clientesApi.darDeBaja(cliente.id), 'Cliente dado de baja')
+          void ejecutar(() => clientesApi.darDeBaja(cliente.id), t.clientes.dadoDeBajaAviso)
         }
         onCancel={() => setAccion(null)}
       />
       <ConfirmDialog
         isOpen={accion === 'anonimizar'}
-        title="Borrar datos personales"
-        description={
-          <p>
-            Se borrarán para siempre el nombre, la cédula, el teléfono, el correo, la dirección y la
-            fecha de nacimiento de <strong>{nombre}</strong>. Sus servicios seguirán contando en las
-            métricas. <strong>Esta acción no se puede deshacer.</strong>
-          </p>
-        }
-        confirmLabel="Borrar datos"
+        title={t.clientes.borrarDatosTitulo}
+        description={t.clientes.borrarDatosTexto(nombre)}
+        confirmLabel={t.clientes.borrarDatosConfirmar}
         confirmText={nombre}
         isLoading={isEnviando}
         onConfirm={() =>
-          void ejecutar(() => clientesApi.anonimizar(cliente.id), 'Datos personales borrados')
+          void ejecutar(() => clientesApi.anonimizar(cliente.id), t.clientes.datosBorrados)
         }
         onCancel={() => setAccion(null)}
       />

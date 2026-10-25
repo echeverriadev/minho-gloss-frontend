@@ -19,6 +19,7 @@ import {
 import { cn } from '@/shared/lib/cn';
 import { nombreCompleto, type Cliente } from '../types';
 import { ClienteAccionesAdmin } from './ClienteAccionesAdmin';
+import { useTextos } from '@/shared/i18n/textos';
 
 export interface ClienteDetalleProps {
   cliente: Cliente;
@@ -42,6 +43,7 @@ function Dato({ etiqueta, children }: { etiqueta: string; children: ReactNode })
 
 export function ClienteDetalle({ cliente }: ClienteDetalleProps) {
   const isAdmin = useIsAdmin();
+  const t = useTextos();
   const { telefono, email } = cliente;
   return (
     <div className="flex flex-col gap-4">
@@ -50,17 +52,17 @@ export function ClienteDetalle({ cliente }: ClienteDetalleProps) {
           <h2 className="text-2xl font-bold text-slate-900">{nombreCompleto(cliente)}</h2>
           <div className="mt-2 flex flex-wrap gap-1">
             {cliente.aceptaContacto ? (
-              <Badge tone="success">Acepta recordatorios</Badge>
+              <Badge tone="success">{t.clientes.aceptaRecordatorios}</Badge>
             ) : (
-              <Badge tone="warning">No acepta recordatorios</Badge>
+              <Badge tone="warning">{t.clientes.noAceptaRecordatorios}</Badge>
             )}
-            {!cliente.activo && <Badge tone="danger">Dado de baja</Badge>}
+            {!cliente.activo && <Badge tone="danger">{t.clientes.dadoDeBaja}</Badge>}
           </div>
         </div>
         {cliente.activo && (
           <ButtonLink to={`/clientes/${cliente.id}/editar`} variant="secondary" size="sm">
             <Pencil className="size-4" aria-hidden />
-            Editar
+            {t.comun.editar}
           </ButtonLink>
         )}
       </div>
@@ -70,7 +72,7 @@ export function ClienteDetalle({ cliente }: ClienteDetalleProps) {
           {telefono && (
             <a href={enlaceLlamada(telefono)} className={accionContacto}>
               <Phone className="size-4" aria-hidden />
-              Llamar
+              {t.clientes.llamar}
             </a>
           )}
           {telefono && (
@@ -81,13 +83,13 @@ export function ClienteDetalle({ cliente }: ClienteDetalleProps) {
               className={accionContacto}
             >
               <MessageCircle className="size-4" aria-hidden />
-              WhatsApp
+              {t.clientes.whatsapp}
             </a>
           )}
           {email && (
             <a href={enlaceCorreo(email)} className={accionContacto}>
               <Mail className="size-4" aria-hidden />
-              Correo
+              {t.clientes.enviarCorreo}
             </a>
           )}
         </div>
@@ -95,28 +97,32 @@ export function ClienteDetalle({ cliente }: ClienteDetalleProps) {
 
       <Card>
         <dl className="divide-y divide-slate-100">
-          <Dato etiqueta="Cédula">{cliente.cedula ?? '—'}</Dato>
-          <Dato etiqueta="Teléfono celular">{telefono ? formatTelefono(telefono) : '—'}</Dato>
-          <Dato etiqueta="Correo">{email ?? '—'}</Dato>
-          <Dato etiqueta="Dirección">{cliente.direccion ?? '—'}</Dato>
-          <Dato etiqueta="Fecha de nacimiento">
+          <Dato etiqueta={t.clientes.cedula}>{cliente.cedula ?? t.comun.sinDato}</Dato>
+          <Dato etiqueta={t.clientes.telefono}>
+            {telefono ? formatTelefono(telefono) : t.comun.sinDato}
+          </Dato>
+          <Dato etiqueta={t.clientes.correo}>{email ?? t.comun.sinDato}</Dato>
+          <Dato etiqueta={t.clientes.direccion}>{cliente.direccion ?? t.comun.sinDato}</Dato>
+          <Dato etiqueta={t.clientes.fechaNacimiento}>
             {cliente.fechaNacimiento
-              ? `${formatFechaCalendario(cliente.fechaNacimiento)} (${calcularEdad(cliente.fechaNacimiento)} años)`
+              ? `${formatFechaCalendario(cliente.fechaNacimiento)} (${t.clientes.edad(calcularEdad(cliente.fechaNacimiento))})`
               : '—'}
           </Dato>
-          {cliente.notas && <Dato etiqueta="Notas">{cliente.notas}</Dato>}
+          {cliente.notas && <Dato etiqueta={t.clientes.notas}>{cliente.notas}</Dato>}
         </dl>
       </Card>
 
       <Card className="grid grid-cols-2 gap-4">
         <div>
-          <p className="text-sm text-slate-500">Servicios</p>
+          <p className="text-sm text-slate-500">{t.clientes.servicios}</p>
           <p className="text-2xl font-semibold text-slate-900">{cliente.totalServicios}</p>
         </div>
         <div>
-          <p className="text-sm text-slate-500">Último servicio</p>
+          <p className="text-sm text-slate-500">{t.clientes.ultimoServicio}</p>
           <p className="text-lg font-medium text-slate-900">
-            {cliente.ultimoServicioEn ? formatFecha(cliente.ultimoServicioEn) : 'Sin servicios'}
+            {cliente.ultimoServicioEn
+              ? formatFecha(cliente.ultimoServicioEn)
+              : t.clientes.sinServicios}
           </p>
         </div>
       </Card>

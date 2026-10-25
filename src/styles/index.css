@@ -1,17 +1,67 @@
 @import 'tailwindcss';
 
+/* Modo oscuro por clase en <html> (preferencia del usuario, spec preferencias). */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-brand-50: #eff6ff;
   --color-brand-100: #dbeafe;
   --color-brand-500: #2563eb;
   --color-brand-600: #1d4ed8;
   --color-brand-700: #1e40af;
+  /* Fondo de tarjetas, campos y diálogos. */
+  --color-surface: #ffffff;
+}
+
+/*
+ * Modo oscuro: en lugar de repetir `dark:` en cada componente, se redefinen los colores del tema.
+ * La escala slate se invierte (fondos oscuros, textos claros) y los tonos suaves de estado
+ * pasan a tonos oscuros, así todas las pantallas cambian sin tocar sus clases.
+ */
+.dark {
+  color-scheme: dark;
+  --color-surface: #111a2e;
+
+  --color-slate-50: #0b1120;
+  --color-slate-100: #1e293b;
+  --color-slate-200: #273449;
+  --color-slate-300: #3b4a61;
+  --color-slate-400: #64748b;
+  --color-slate-500: #94a3b8;
+  --color-slate-600: #a8b4c6;
+  --color-slate-700: #cbd5e1;
+  --color-slate-800: #e2e8f0;
+  --color-slate-900: #f1f5f9;
+  --color-slate-950: #f8fafc;
+
+  --color-brand-50: #172554;
+  --color-brand-100: #1e3a8a;
+  --color-brand-700: #93c5fd;
+
+  --color-red-50: #2a1215;
+  --color-red-100: #3b1418;
+  --color-red-200: #7f1d1d;
+  --color-red-700: #f87171;
+  --color-red-800: #fca5a5;
+
+  --color-green-50: #0f2a1c;
+  --color-green-100: #123524;
+  --color-green-200: #166534;
+  --color-green-700: #4ade80;
+  --color-green-800: #86efac;
+
+  --color-amber-100: #3a2a0a;
+  --color-amber-800: #fcd34d;
 }
 
 body {
   @apply bg-slate-50 text-slate-900 antialiased;
 }
 
+dialog {
+  @apply bg-surface text-slate-900;
+}
+
 dialog::backdrop {
-  @apply bg-slate-900/50;
+  @apply bg-black/60;
 }

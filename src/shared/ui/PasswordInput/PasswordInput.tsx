@@ -3,6 +3,7 @@ import { type InputHTMLAttributes, type Ref, useId, useState } from 'react';
 import { cn } from '@/shared/lib/cn';
 import { Field } from '../Field/Field';
 import { fieldDescribedBy, inputClasses, inputStateClasses } from '../Field/fieldClasses';
+import { useTextos } from '@/shared/i18n/textos';
 
 export interface PasswordInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
   label: string;
@@ -24,6 +25,7 @@ export function PasswordInput({
   const generatedId = useId();
   const inputId = id ?? generatedId;
   const [isVisible, setIsVisible] = useState(false);
+  const t = useTextos();
   return (
     <Field id={inputId} label={label} error={error} hint={hint}>
       <div className="relative">
@@ -39,7 +41,7 @@ export function PasswordInput({
         <button
           type="button"
           onClick={() => setIsVisible((visible) => !visible)}
-          aria-label={isVisible ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+          aria-label={isVisible ? t.comun.ocultarPassword : t.comun.mostrarPassword}
           aria-pressed={isVisible}
           className="absolute inset-y-0 right-0 flex w-11 items-center justify-center rounded-r-lg text-slate-500 hover:text-slate-800"
         >

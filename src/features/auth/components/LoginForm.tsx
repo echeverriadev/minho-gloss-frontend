@@ -10,6 +10,7 @@ import { authApi } from '../api';
 import { useSessionStore } from '../store';
 import type { LoginRequest } from '../types';
 import { FormAlert } from '@/shared/ui/FormAlert/FormAlert';
+import { useTextos } from '@/shared/i18n/textos';
 
 interface LocationState {
   from?: string;
@@ -18,6 +19,7 @@ interface LocationState {
 export function LoginForm() {
   const navigate = useNavigate();
   const location = useLocation();
+  const t = useTextos();
   const iniciarSesion = useSessionStore((state) => state.iniciarSesion);
   const [aviso] = useState(() => useSessionStore.getState().tomarAvisoLogin());
   const [errorApi, setErrorApi] = useState<string>();
@@ -37,7 +39,7 @@ export function LoginForm() {
     } catch (error) {
       setErrorApi(
         error instanceof ApiError && error.status === 401
-          ? 'Correo o contraseña incorrectos'
+          ? t.auth.credencialesIncorrectas
           : mensajeDeError(error),
       );
     }
@@ -45,33 +47,33 @@ export function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4">
-      {aviso && !errorApi && <FormAlert tipo="info">{aviso}</FormAlert>}
+      {aviso && !errorApi && <FormAlert tipo="info">{t.auth[aviso]}</FormAlert>}
       {errorApi && <FormAlert tipo="error">{errorApi}</FormAlert>}
       <Input
-        label="Correo"
+        label={t.auth.correo}
         type="email"
         autoComplete="email"
         inputMode="email"
         error={errors.email?.message}
         {...register('email', {
-          required: 'El correo es obligatorio',
-          pattern: { value: EMAIL_PATTERN, message: 'El correo no es válido' },
+          required: t.validacion.emailObligatorio,
+          pattern: { value: EMAIL_PATTERN, message: t.validacion.emailInvalido },
         })}
       />
       <PasswordInput
-        label="Contraseña"
+        label={t.auth.password}
         autoComplete="current-password"
         error={errors.password?.message}
-        {...register('password', { required: 'La contraseña es obligatoria' })}
+        {...register('password', { required: t.validacion.passwordObligatoria })}
       />
       <Button type="submit" isLoading={isSubmitting} fullWidth>
-        Iniciar sesión
+        {t.auth.iniciarSesion}
       </Button>
       <Link
         to="/recuperar-password"
         className="text-brand-700 self-center py-2 text-sm font-medium hover:underline"
       >
-        ¿Olvidaste tu contraseña?
+        {t.auth.olvidastePassword}
       </Link>
     </form>
   );
