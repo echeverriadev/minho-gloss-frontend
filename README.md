@@ -22,6 +22,8 @@ docker compose up --build
 | App                                                           | http://localhost:5173 |
 | Storybook (`docker compose --profile storybook up storybook`) | http://localhost:6006 |
 
+La app necesita el backend levantado (`minho-gloss-backend`, `docker compose up`). Para entrar usa el admin inicial que crea el backend desde su `.env` (en desarrollo `admin@minhogloss.local` / `MinhoGloss2026`). No hay registro público: el admin crea las cuentas en **Ajustes → Usuarios**. Los correos de recuperación de contraseña se ven en Mailpit, http://localhost:8025.
+
 ## Comandos habituales
 
 Todos se ejecutan **dentro del contenedor**:
@@ -44,12 +46,13 @@ Si cambia `package.json` en otra rama (por ejemplo tras un `git pull`), actualiz
 ```
 src/
   main.tsx           # punto de entrada
-  app/               # App y router
+  app/               # App, router y layout (navegación por rol)
   pages/             # una página por ruta (solo composición)
-  features/          # un dominio por carpeta: auth, clientes, servicios...
+  features/          # un dominio por carpeta: auth, usuarios, clientes...
   shared/
     ui/              # componentes reutilizables (cada uno con su .stories.tsx)
-    lib/             # utilidades, cliente HTTP
+    lib/             # utilidades, cliente HTTP, formatos
+    hooks/           # useAsync, useDebouncedValue
     config/          # variables de entorno
   styles/            # Tailwind y tema
 openspec/            # especificaciones (SDD)

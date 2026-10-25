@@ -1,28 +1,52 @@
+import { LoaderCircle } from 'lucide-react';
 import type { ButtonHTMLAttributes } from 'react';
-
-type ButtonVariant = 'primary' | 'secondary';
+import { cn } from '@/shared/lib/cn';
+import {
+  buttonBaseClasses,
+  buttonSizeClasses,
+  buttonVariantClasses,
+  type ButtonSize,
+  type ButtonVariant,
+} from './buttonClasses';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
+  size?: ButtonSize;
+  isLoading?: boolean;
+  fullWidth?: boolean;
 }
-
-const variantClasses: Record<ButtonVariant, string> = {
-  primary: 'bg-brand-600 text-white hover:bg-brand-700',
-  secondary: 'bg-white text-slate-900 ring-1 ring-slate-300 hover:bg-slate-100',
-};
 
 export function Button({
   variant = 'primary',
+  size = 'md',
   type = 'button',
-  className = '',
+  isLoading = false,
+  fullWidth = false,
+  disabled,
+  className,
+  children,
   ...props
 }: ButtonProps) {
   return (
     <button
       // oxlint-disable-next-line react/button-has-type -- el tipo llega por props y por defecto es 'button'
       type={type}
-      className={`min-h-11 rounded-lg px-4 font-medium transition-colors disabled:opacity-50 ${variantClasses[variant]} ${className}`}
+      disabled={disabled || isLoading}
+      aria-busy={isLoading || undefined}
+      className={cn(
+        buttonBaseClasses,
+        buttonVariantClasses[variant],
+        buttonSizeClasses[size],
+        fullWidth && 'w-full',
+        className,
+      )}
       {...props}
-    />
+    >
+      {/* El texto queda invisible pero ocupa su lugar para que el botón conserve su ancho */}
+      <span className={cn('inline-flex items-center gap-2', isLoading && 'invisible')}>
+        {children}
+      </span>
+      {isLoading && <LoaderCircle className="absolute size-5 animate-spin" aria-hidden />}
+    </button>
   );
 }
