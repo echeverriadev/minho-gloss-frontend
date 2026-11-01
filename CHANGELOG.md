@@ -6,6 +6,10 @@ El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/) y l
 
 ## [Sin publicar]
 
+## [0.3.0] - 2026-11-01
+
+Fase 3 del roadmap: la operación diaria del autolavado. Cada visita se registra como una atención con sus servicios, cliente opcional, precios personalizados por el admin y un detalle imprimible, como base para las métricas.
+
 ### Agregado
 
 - **Inicio con el registro rápido (fase 3):** botón "Registrar servicio", resumen del día (el total cobrado solo lo ve el admin) y los últimos servicios de hoy.
@@ -37,5 +41,6 @@ Primera versión publicada. Incluye las fases 0, 1 y 2 del roadmap: entorno, esp
 
 - Abierta como `127.0.0.1` o desde el celular, la app no pasaba del login: ahora llama a la API en el mismo host desde el que se abre.
 
-[Sin publicar]: https://github.com/echeverriadev/minho-gloss-frontend/compare/v0.2.0...develop
+[Sin publicar]: https://github.com/echeverriadev/minho-gloss-frontend/compare/v0.3.0...develop
+[0.3.0]: https://github.com/echeverriadev/minho-gloss-frontend/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/echeverriadev/minho-gloss-frontend/releases/tag/v0.2.0
