@@ -8,6 +8,7 @@ interface Formateadores {
   moneda: Intl.NumberFormat;
   fecha: Intl.DateTimeFormat;
   fechaHora: Intl.DateTimeFormat;
+  hora: Intl.DateTimeFormat;
   fechaCalendario: Intl.DateTimeFormat;
 }
 
@@ -25,6 +26,7 @@ function formateadores(): Formateadores {
         dateStyle: 'medium',
         timeStyle: 'short',
       }),
+      hora: new Intl.DateTimeFormat(locale, { timeZone: env.timeZone, timeStyle: 'short' }),
       fechaCalendario: new Intl.DateTimeFormat(locale, { timeZone: 'UTC', dateStyle: 'long' }),
     };
     cache.set(locale, actuales);
@@ -47,6 +49,11 @@ export function formatFechaHora(fechaIso: string): string {
   return formateadores().fechaHora.format(new Date(fechaIso));
 }
 
+/** Formatea solo la hora de una fecha ISO 8601 en la zona horaria del negocio, por ejemplo "10:30". */
+export function formatHora(fechaIso: string): string {
+  return formateadores().hora.format(new Date(fechaIso));
+}
+
 /** Formatea una fecha de calendario `YYYY-MM-DD` (sin hora), por ejemplo una fecha de nacimiento. */
 export function formatFechaCalendario(fecha: string): string {
   return formateadores().fechaCalendario.format(new Date(`${fecha}T00:00:00Z`));
@@ -55,6 +62,39 @@ export function formatFechaCalendario(fecha: string): string {
 /** Hoy como `YYYY-MM-DD` en la zona del negocio. */
 export function hoyIso(ahora = new Date()): string {
   return new Intl.DateTimeFormat('en-CA', { timeZone: env.timeZone }).format(ahora);
+}
+
+/** Fecha y hora ISO 8601 → valor de `<input type="datetime-local">` en la zona del negocio. */
+export function aFechaHoraLocal(fechaIso: string): string {
+  const partes = Object.fromEntries(
+    new Intl.DateTimeFormat('en-CA', {
+      timeZone: env.timeZone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hourCycle: 'h23',
+    })
+      .formatToParts(new Date(fechaIso))
+      .map((parte) => [parte.type, parte.value]),
+  );
+  return `${partes.year}-${partes.month}-${partes.day}T${partes.hour}:${partes.minute}`;
+}
+
+/** Valor de `<input type="datetime-local">` en la zona del negocio → fecha ISO 8601 en UTC. */
+export function deFechaHoraLocal(valor: string): string {
+  const comoUtc = new Date(`${valor}:00Z`);
+  // Desfase de la zona en ese momento: se compara la hora local que resulta con la buscada.
+  const desfase =
+    new Date(`${aFechaHoraLocal(comoUtc.toISOString())}:00Z`).getTime() - comoUtc.getTime();
+  return new Date(comoUtc.getTime() - desfase).toISOString();
+}
+
+/** Día anterior a `dia` (`YYYY-MM-DD`). */
+export function diaAnterior(dia: string): string {
+  const [anio, mes, diaMes] = dia.split('-').map(Number);
+  return new Date(Date.UTC(anio, mes - 1, diaMes - 1)).toISOString().slice(0, 10);
 }
 
 /** Años cumplidos a hoy a partir de una fecha `YYYY-MM-DD`. */
