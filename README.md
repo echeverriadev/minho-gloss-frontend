@@ -88,3 +88,10 @@ Reglas completas:
 ```bash
 docker build --target prod --build-arg VITE_API_URL=https://tu-api/api -t minho-gloss-web .
 ```
+
+### Vercel
+
+La app se publica en Vercel (proyecto `minho-gloss-frontend`). Cada push a `main` despliega producción y cada pull request genera una preview.
+
+- `vercel.json` redirige cualquier ruta a `index.html` para que React Router resuelva las rutas al recargar.
+- Variable de entorno obligatoria en el proyecto de Vercel: `VITE_API_URL` con la URL pública de la API terminada en `/api`. Se lee al compilar, así que tras cambiarla hay que volver a desplegar.
