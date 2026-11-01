@@ -19,6 +19,10 @@ Fase 3 del roadmap: la operación diaria del autolavado. Cada visita se registra
 - **Detalle de la atención imprimible** con número, cliente, vehículo, precios de lista y cobrados, descuentos y total, más corrección de pago y notas y anulación con motivo para el admin.
 - **Historial de servicios** y botón "Registrar servicio" en la ficha del cliente.
 
+### Despliegue
+
+- **App en Vercel:** cada push a `main` despliega producción y cada pull request genera una preview. `vercel.json` redirige todas las rutas a `index.html` para que funcionen los enlaces directos (por ejemplo `/servicios/123`). La URL de la API se configura con `VITE_API_URL`, documentada en el README.
+
 ## [0.2.0] - 2026-10-25
 
 Primera versión publicada. Incluye las fases 0, 1 y 2 del roadmap: entorno, especificaciones y las primeras pantallas de la app (acceso, usuarios, clientes, catálogo de servicios y preferencias).
